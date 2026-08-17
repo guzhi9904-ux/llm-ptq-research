@@ -1,0 +1,55 @@
+# 这是本仓库复现实验配置模板，不代表任何论文的最终默认设置。
+experiment:
+  name: example_w4a4
+  method: rtn                     # 方法名称，例如 rtn、gptq、quarot、mr_gptq
+  evidence_level: controlled      # controlled 表示统一协议下的本地受控实验
+
+model:
+  name_or_path: /模型路径
+  revision: null                  # 使用 Hugging Face 模型时必须固定 revision
+  dtype: bfloat16                 # 模型加载和未量化算子的计算精度
+
+quantization:
+  format: mxfp4                   # 可选 int、mxfp4、nvfp4；不能只写 fp4
+  weight_bits: 4
+  activation_bits: 4
+  kv_bits: 16                     # 16 表示当前实验不量化 KV cache
+  weight_group_size: 32           # MXFP4 示例按原生 block 32 设置
+  activation_group_size: 32
+  symmetric: true                 # INT 路径需明确；FP4 路径由格式定义决定
+  zero_point: false
+  scale_selection: max_safe       # max_safe、mse_grid 等策略必须显式记录
+
+rotation:
+  enabled: false
+  type: identity                  # identity、hadamard、learned 等
+  group_size: null                # rotation group 与 quantization block 是不同概念
+  seed: 0
+
+gptq:
+  enabled: false
+  relative_damping: 0.01          # Hessian damping；需按具体官方实现核实
+  update_block_size: 128          # GPTQ 计算 block，不是 weight group size
+  act_order: false
+  true_sequential: false
+
+calibration:
+  dataset: wikitext2
+  split: train
+  num_samples: 128
+  sequence_length: 2048
+  seed: 0
+
+evaluation:
+  perplexity_dataset: wikitext2
+  perplexity_split: test
+  sequence_length: 2048
+  tasks: []                       # lm-eval 任务名称；运行时必须固定版本和 shot 数
+  batch_size: 1
+
+runtime:
+  device: cuda
+  gpu_name: null                  # 运行后写入真实 GPU 型号
+  cuda_version: null
+  pytorch_version: null
+  transformers_version: null

@@ -1,0 +1,31 @@
+# 统一文本行尾，避免 Windows checkout 改写论文源码中的 LF。
+* text=auto
+*.py text eol=lf
+*.sh text eol=lf
+*.md text eol=lf
+*.txt text eol=lf
+*.json text eol=lf
+*.jsonl text eol=lf
+*.yaml text eol=lf
+*.yml text eol=lf
+*.toml text eol=lf
+*.csv text eol=lf
+*.cu text eol=lf
+*.cuh text eol=lf
+*.cpp text eol=lf
+*.h text eol=lf
+*.hpp text eol=lf
+*.ps1 text eol=lf
+
+# 常见论文资产和模型配置按二进制保存。
+*.png binary
+*.jpg binary
+*.jpeg binary
+*.gif binary
+*.pdf binary
+*.pt binary
+*.pth binary
+*.bin binary
+*.safetensors binary
+*.npy binary
+*.npz binary

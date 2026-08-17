@@ -1,0 +1,21 @@
+domain,family,method,venue_year,paper_url,official_code,local_source,inclusion,status,notes_zh
+INT,gptq,GPTQ,ICLR 2023,https://arxiv.org/abs/2210.17323,https://github.com/IST-DASLab/gptq,llm-ptq-research/int/gptq/GPTQ/upstream,core,source-pinned,原始 weight-only 二阶 PTQ 起点
+INT,smooth,SmoothQuant,ICML 2023,https://arxiv.org/abs/2211.10438,https://github.com/mit-han-lab/smoothquant,../smoothquant,core,logic-audited,官方主设置为 W8A8
+INT,rotation-transform,OmniQuant,ICLR 2024,https://arxiv.org/abs/2308.13137,https://github.com/OpenGVLab/OmniQuant,../OmniQuant,core,logic-audited,本地工作树含非上游修改
+INT,rotation-transform,AffineQuant,ICLR 2024,https://arxiv.org/abs/2403.12544,https://github.com/bytedance/AffineQuant,llm-ptq-research/int/rotation/AffineQuant/upstream,core,source-pinned,已重新取得官方固定版本
+INT,rotation,QuaRot,NeurIPS 2024,https://arxiv.org/abs/2404.00456,https://github.com/spcl/QuaRot,../QuaRot,core,logic-audited,端到端 W4A4KV4
+INT,rotation-transform,DuQuant,NeurIPS 2024 Oral,https://arxiv.org/abs/2406.01721,https://github.com/Hsu1023/DuQuant,../DuQuant,core,source-pinned,rotation 加 permutation
+INT,rotation,SpinQuant,ICLR 2025,https://arxiv.org/abs/2405.16406,https://github.com/facebookresearch/SpinQuant,../SpinQuant,core,logic-audited,许可证为 CC BY-NC 4.0
+INT,rotation-transform,OSTQuant,ICLR 2025,https://arxiv.org/abs/2501.13987,https://github.com/BrotherHappy/OSTQuant,llm-ptq-research/int/rotation/OSTQuant/upstream,core,source-pinned,官方 commit 已固定
+INT,rotation-transform,FlatQuant,ICML 2025,https://arxiv.org/abs/2410.09426,https://github.com/ruikangliu/FlatQuant,../FlatQuant,core,logic-audited,本地工作树含部署修改
+INT,gptq-enhancement,GuidedQuant,ICML 2025,https://proceedings.mlr.press/v267/kim25d.html,https://github.com/snu-mllab/GuidedQuant,llm-ptq-research/int/gptq/GuidedQuant/upstream,candidate,source-pinned,用最终损失梯度指导层级 PTQ
+INT,rotation-codebook,Q-Palette,NeurIPS 2025,https://proceedings.neurips.cc/paper_files/paper/2025/hash/10df8641edc837ca49360d5fb1d182f0-Abstract-Conference.html,https://github.com/snu-mllab/Q-Palette,llm-ptq-research/int/rotation/Q-Palette/upstream,candidate,source-pinned,weight-only 分数 bit quantizer
+INT,rotation,ParoQuant,arXiv 2025,https://arxiv.org/abs/2511.10645,https://github.com/z-lab/paroquant,../paroquant,core,source-pinned,预印本且复现分支待确认
+INT,learned-ptq,SliderQuant,ICLR 2026,https://openreview.net/forum?id=YNqZqw4fLT,https://github.com/deep-optimization/SliderQuant,../SliderQuant,candidate,identified,跨层和层内 sliding PTQ
+FP4,baseline,RTN,基础基线,,,../quantization_harness,core,logic-audited,必须分别定义 MXFP4 与 NVFP4
+FP4,baseline,GPTQ,基础基线,,,../FP-Quant,core,logic-audited,FP4 网格上的二阶补偿
+FP4,baseline,Rotation,基础基线,,,../quantization_harness,core,logic-audited,identity global 与 block-local 分开
+FP4,format-specific,MR-GPTQ,ICLR 2026,https://arxiv.org/abs/2509.23202,https://github.com/IST-DASLab/FP-Quant,../FP-Quant,core,logic-audited,许可证和本地差异待核实
+FP4,mixed-precision,MicroMix,ICLR 2026,https://arxiv.org/abs/2508.02343,https://github.com/lwy2020/MicroMix,llm-ptq-research/fp4/methods/MicroMix/upstream,core,source-pinned,官方分支已固定但无根 LICENSE
+FP4,adaptive-format,MixFP4,ICML 2026,https://arxiv.org/abs/2605.31035,,,core,blocked,尚未定位作者官方代码
+FP4,rotation,DuQuant++,arXiv 2026,https://arxiv.org/abs/2604.17789,https://github.com/Hsu1023/DuQuant-v2,llm-ptq-research/fp4/methods/DuQuantPP/upstream,candidate,source-pinned,会议归属待确认

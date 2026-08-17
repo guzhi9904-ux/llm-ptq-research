@@ -1,0 +1,44 @@
+# 本仓库根目录和自研实验产生的大文件；不影响论文 `upstream/` 快照。
+/models/
+/datasets/
+/cache/
+/checkpoints/
+/outputs/
+/experiments/**/models/
+/experiments/**/datasets/
+/experiments/**/cache/
+/experiments/**/checkpoints/
+/experiments/**/outputs/
+/experiments/**/*.pt
+/experiments/**/*.pth
+/experiments/**/*.safetensors
+/experiments/**/*.bin
+/experiments/**/*.npz
+/experiments/**/*.npy
+
+# 官方仓库未提供根目录许可证：源码仅保留在本地，不进入可发布 Git 历史。
+/fp4/methods/MR-GPTQ/upstream/
+/fp4/methods/MicroMix/upstream/
+
+# Python and notebook state
+__pycache__/
+*.py[cod]
+.pytest_cache/
+.ipynb_checkpoints/
+
+# Environments and build products
+.venv/
+venv/
+/build/
+/dist/
+*.egg-info/
+
+# Editors and OS files
+.vscode/
+.idea/
+.DS_Store
+Thumbs.db
+
+# Keep result schemas and summaries, ignore raw run payloads
+results/runs/**
+!results/runs/.gitkeep

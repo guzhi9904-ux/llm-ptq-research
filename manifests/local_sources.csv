@@ -1,0 +1,12 @@
+method,local_path,origin,branch,commit,dirty_entries,license_observation,action
+SmoothQuant,../smoothquant,https://github.com/mit-han-lab/smoothquant.git,main,c61476d728e42ae0d8a35e7e78494edcac3237b5,0,MIT,pin-clean-source
+QuaRot,../QuaRot,https://github.com/spcl/QuaRot.git,main,5008669b08c1f11f9b64d52d16fddd47ca754c5a,0,Apache-2.0,pin-clean-source
+SpinQuant,../SpinQuant,https://github.com/facebookresearch/SpinQuant.git,main,8f47aa3f00e8662caf1a484153920a07e5281c3a,0,CC-BY-NC-4.0,license-restricted-reference
+ParoQuant,../paroquant,https://github.com/z-lab/paroquant.git,main,f74a96c306f7db3938e758d7dbc945d450f9f23f,0,MIT,verify-reproduction-branch
+OmniQuant,../OmniQuant,https://github.com/OpenGVLab/OmniQuant.git,agent/lensq-omniquant-smoke,3a7d4fbc174981b4fd5d84ddd268e048d9c654ca,28,MIT,do-not-vendor-dirty-tree
+FlatQuant,../FlatQuant,https://github.com/ruikangliu/FlatQuant.git,main,9d88ffcb7d2c6bda59fb5c44dad36adc101aadb1,35,MIT,do-not-vendor-dirty-tree
+DuQuant,../DuQuant,https://github.com/Hsu1023/DuQuant.git,main,d56cfc6fe97c34c0eb100fec82fe439865905679,0,MIT,pin-clean-source
+FP-Quant,../FP-Quant,https://github.com/IST-DASLab/FP-Quant.git,master,d2e3092f968262c4de5fb050e1aef568a280dadd,5,no-root-license-found,verify-license-and-diff
+SliderQuant,../SliderQuant,https://github.com/deep-optimization/SliderQuant.git,main,eed0b8542f208c0e1d629ee3dd36f69416bb2a2e,2,Apache-2.0,verify-diff
+AWQ,../llm-awq,https://github.com/mit-han-lab/llm-awq.git,main,d6e797a42b9ef7778de8ee2352116e0f48a78d61,0,MIT,optional-baseline
+FlexRot-FP4,../flexrot-fp4,https://github.com/guzhi9904-ux/flexrot-fp4.git,main,eb5bb80b9e25acad9461b277e653c3d0d1243995,0,MIT,own-experiment-source

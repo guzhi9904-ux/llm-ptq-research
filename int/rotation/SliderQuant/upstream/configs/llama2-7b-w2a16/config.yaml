@@ -1,0 +1,39 @@
+model: model_zoo/Llama-2-7b-hf
+wbits: 2   
+abits: 16
+epochs: 60
+use_bfloat16: true
+eval_ppl: true
+quant_mode: lora_only  # [fp16,slider,lora_only] slider is for W4A4, lora_only is for WXA16.
+batch_size: 3
+low_memory: true
+nsamples: 128        # the num pf calibration data
+calib_dataset: wikitext2       
+test_datasets: wikitext2,c4
+
+# group layer
+num_layer: 4     # middle sliding window size
+sliding_layer: 2  # middle sliding stride
+fill_window_size: 4   # progressive sliding size
+
+
+# lora
+lora_rank: 4        # lora rank
+use_lora: true     # 默认
+
+
+# instraSliding
+quant_rate: 0.5     
+
+
+# target generation and loss
+inference_batch_size: 12   # the batchsize in get training data
+fp16_act: false           # use fp_act to reduce cpu memory
+
+
+# optimizer
+scale_lr: 0.00    #learn scaling学习率
+lora_lr: 0.0005     # lora 学习率
+lwc_lr: 0.01       # lwc学习率
+warmup_ratio: 0.0  # warnup占总训练iter的比例，范围：[0.0,1.0]
+wd: 0.0
