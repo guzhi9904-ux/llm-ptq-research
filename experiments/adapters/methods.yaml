@@ -202,7 +202,7 @@ methods:
     note_zh: 官方入口依赖会修改 task_list.conf 的任务队列，适配前保持手工执行。
 
   mr_gptq_reference:
-    display_name: MR-GPTQ independent reference
+    display_name: MR-GPTQ PyTorch 复现
     family: fp4/reference
     environment: fp4_reference
     source_policy: original_mit
@@ -215,7 +215,7 @@ methods:
         required_files: [examples/synthetic_demo.py, src/ptq_fp4_reference/mr_gptq.py]
 
   micromix_reference:
-    display_name: MicroMix independent reference
+    display_name: MicroMix PyTorch 复现
     family: fp4/reference
     environment: fp4_reference
     source_policy: original_mit

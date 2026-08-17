@@ -159,7 +159,7 @@ profiles:
       torch: ">=2.2"
       PyYAML: ">=6.0"
     source: fp4/reference/pyproject.toml
-    note_zh: 本仓库独立参考实现的 CPU/GPU PyTorch 环境，不包含真实 FP4 kernel。
+    note_zh: 运行本仓库 FP4 PyTorch 代码的环境，不包含真实 FP4 kernel。
 
   micromix:
     status: upstream_pinned_partial

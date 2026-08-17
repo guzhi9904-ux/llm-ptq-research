@@ -1,7 +1,7 @@
 """Microscaling 浮点格式的可读 fake-quant 实现。
 
-这里保存的是反量化后的 PyTorch 张量，不进行 bit packing，也不声称模拟
-Blackwell Tensor Core 的逐位行为。量化级别与 block scale 公式独立可测。
+这里保存反量化后的 PyTorch 张量，不做 bit packing，也没有模拟 Blackwell
+Tensor Core 的逐 bit 行为。量化级别和 block scale 可以单独测试。
 """
 
 from __future__ import annotations

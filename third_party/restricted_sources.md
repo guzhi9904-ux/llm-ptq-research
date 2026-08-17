@@ -21,6 +21,6 @@ FP-Quant 和 MicroMix 的作者官方仓库当前没有根目录 LICENSE。为�
 
 MicroMix 的 ICLR 2026 分支不是仓库默认分支，获取时必须显式选择 `micromix`。
 
-## 可公开的独立参考实现
+## 本仓库自己的复现代码
 
-本仓库在 `fp4/reference/` 提供根据两篇论文公式重新编写的 PyTorch fake-quant 参考实现。该目录使用独立 MIT License，不包含这里列出的官方源码或 CUDA kernel；其 `synthetic-smoke-tested` 状态不能替代官方整模型结果。
+`fp4/reference/` 放的是我们按两篇论文公式写的 PyTorch fake-quant 代码，使用 MIT License，里面没有官方源码或 CUDA kernel。目前只跑过合成张量测试，还没有完整模型结果。

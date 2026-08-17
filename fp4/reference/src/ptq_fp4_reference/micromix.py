@@ -1,7 +1,7 @@
-"""根据 MicroMix 论文公式独立实现的离线 channel 分区参考流程。
+"""MicroMix 的离线 channel 分区和 fake quant 实现。
 
-该文件实现 activation 统计、阈值比例、静态 permutation 以及 MXFP4/6/8
-fake quant。它不包含原仓库的 CUDA 代码，也不声称复现 Blackwell kernel 延迟。
+该文件包括 activation 统计、阈值比例、静态 permutation 以及 MXFP4/6/8
+fake quant，不包括 Blackwell CUDA kernel。
 """
 
 from __future__ import annotations
@@ -74,8 +74,8 @@ def quantization_threshold(maximum: Tensor, bits: int) -> Tensor:
 def estimate_precision_proportions(activations: Tensor) -> dict[int, float]:
     """逐 token 使用论文阈值，再对校准样本汇总 4/6/8-bit 元素比例。
 
-    论文给出逐层 p4/p6/p8 与离线固定策略，但未规定所有实现细节。这里采用
-    对校准元素比例求均值的透明规则，并在 README 中标为参考选择。
+    论文给出逐层 p4/p6/p8 与离线固定策略，但没有写全汇总细节。这里对
+    calibration 元素比例取平均，再换算成每种精度的 channel 数。
     """
 
     flattened = activations.reshape(-1, activations.shape[-1]).float().abs()

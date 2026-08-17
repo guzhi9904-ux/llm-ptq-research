@@ -1,10 +1,10 @@
-# FP4 PTQ 独立参考实现
+# FP4 PTQ 复现代码
 
-本目录根据论文公开公式独立编写 MR-GPTQ 与 MicroMix 的 PyTorch 数值参考实现，没有复制 FP-Quant 或 MicroMix 官方仓库的源文件。代码采用本目录的 MIT License；论文、名称和官方实现仍归原作者所有。
+这里放的是我们按论文公式自己写的 MR-GPTQ 和 MicroMix PyTorch 代码，没有直接搬 FP-Quant 或 MicroMix 仓库里的源码。代码使用本目录的 MIT License，方法名和论文仍属于原作者。
 
-## 实现范围
+## 目前写了什么
 
-MR-GPTQ 参考路径包含：
+MR-GPTQ 部分包括：
 
 - MXFP4 E2M1、32 元素 block 与 E8M0 scale 近似。
 - NVFP4 E2M1、16 元素 block、E4M3 group scale 与 tensor scale 近似。
@@ -12,9 +12,9 @@ MR-GPTQ 参考路径包含：
 - block-wise normalized Hadamard transform。
 - 固定原始 quantization grid 后的 static ActOrder。
 - 基于校准 Gram/Hessian 的逐列 GPTQ error compensation。
-- identity、rotation + RTN、identity + GPTQ 和 MR-GPTQ 可控基线。
+- identity、rotation + RTN、identity + GPTQ 和 MR-GPTQ 几组基线。
 
-MicroMix 参考路径包含：
+MicroMix 部分包括：
 
 - MXFP4 E2M1、MXFP6 E3M2、MXFP8 E5M2/E4M3 网格。
 - 论文阈值公式 `T(n)`。
@@ -23,14 +23,14 @@ MicroMix 参考路径包含：
 - activation 和对应 weight channel 的相同精度 fake quant。
 - 平均元素位宽与 E8M0 scale 存储开销计算。
 
-## 明确不包含
+## 目前还没做什么
 
 - QuTLASS、CUTLASS 或 MicroMix Blackwell CUDA kernel。
-- FP4 bit packing、硬件特殊值和逐位一致性声明。
+- FP4 bit packing、硬件特殊值和逐 bit 对齐检查。
 - Hugging Face 全模型自动替换、PPL 或 lm-eval 结果。
 - 官方 checkpoint、官方代码或论文性能数字的复制。
 
-因此该实现状态是 `synthetic-smoke-tested`，不是 `reproduced`，不能用 CPU fake quant 延迟替代真实 GPU 性能。
+目前代码只用合成张量跑通过，还没有做完整模型实验。CPU 上的 fake quant 运行时间也不能当作 GPU kernel 性能。
 
 ## 安装与测试
 
@@ -62,12 +62,12 @@ ptq-fp4-reference micromix \
   --output micromix_result.pt
 ```
 
-## 论文对应与参考选择
+## 实现时采用的规则
 
 - MR-GPTQ 论文：[Bridging the Gap Between Promise and Performance for Microscaling FP4 Quantization](https://arxiv.org/abs/2509.23202)。
 - MicroMix 论文：[MicroMix: Efficient Mixed-Precision Quantization with Microscaling Formats for Large Language Models](https://arxiv.org/abs/2508.02343)。
 - E2M1 使用正级别 `{0, 0.5, 1, 1.5, 2, 3, 4, 6}`。
-- MicroMix 论文没有完全规定如何把所有 calibration 元素的阈值标签汇总成整数 channel 数；本实现公开采用“元素比例平均 + largest remainder”的规则，并允许 channel alignment。该选择必须与官方结果分开标注。
-- MSE scale search 使用可读的有限网格搜索，目标是验证算法关系，不是复刻官方高性能实现。
+- MicroMix 论文没有写清楚怎样把所有 calibration 元素的阈值标签换成整数 channel 数。这里先对元素比例取平均，再用 largest remainder 补齐 channel 数，也可以设置 channel alignment。这个处理可能和官方代码不同。
+- MSE scale search 用有限网格逐个尝试，写法比较直观，但速度不是重点。
 
-独立实现和论文公式的逐项对应见 `IMPLEMENTATION_NOTES.md`。
+各段代码对应哪条论文公式，见 `IMPLEMENTATION_NOTES.md`。

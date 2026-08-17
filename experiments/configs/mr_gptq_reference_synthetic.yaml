@@ -1,4 +1,4 @@
-# 本仓库独立 MR-GPTQ 参考实现的 CPU 合成测试，不代表论文整模型结果。
+# 用 CPU 合成张量检查 MR-GPTQ 代码，不是论文里的完整模型实验。
 experiment:
   id: mr_gptq_reference_synthetic_seed0
   method: mr_gptq_reference

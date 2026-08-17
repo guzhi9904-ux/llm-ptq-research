@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""用合成张量演示两个独立参考流程，不下载模型或数据集。"""
+"""用合成张量运行 MR-GPTQ 和 MicroMix，不下载模型或数据集。"""
 
 from __future__ import annotations
 
@@ -47,7 +47,7 @@ def run_micromix(args: argparse.Namespace) -> None:
 
 
 def main() -> None:
-    parser = argparse.ArgumentParser(description="FP4 PTQ 独立参考实现合成示例")
+    parser = argparse.ArgumentParser(description="FP4 PTQ 合成张量示例")
     parser.add_argument("method", choices=["mr-gptq", "micromix"])
     parser.add_argument("--hidden-size", type=int, default=128)
     parser.add_argument("--output-size", type=int, default=16)

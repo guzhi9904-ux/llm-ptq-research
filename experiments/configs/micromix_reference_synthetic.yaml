@@ -1,4 +1,4 @@
-# 本仓库独立 MicroMix 参考实现的 CPU 合成测试，不代表 Blackwell kernel 结果。
+# 用 CPU 合成张量检查 MicroMix 代码，不是 Blackwell kernel 测试。
 experiment:
   id: micromix_reference_synthetic_seed0
   method: micromix_reference

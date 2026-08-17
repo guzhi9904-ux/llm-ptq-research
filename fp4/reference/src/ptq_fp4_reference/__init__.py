@@ -1,4 +1,4 @@
-"""FP4 PTQ 独立参考实现。"""
+"""MR-GPTQ 和 MicroMix 的 FP4 PTQ 复现代码。"""
 
 from .formats import FORMAT_SPECS, MX_SPECS, microscale_fake_quant
 from .mr_gptq import MRGPTQConfig, MRGPTQResult, quantize_mr_gptq, quantize_rtn

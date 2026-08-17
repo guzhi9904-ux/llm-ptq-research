@@ -1,4 +1,4 @@
-"""对已提取 Linear weight 和校准 activation 执行参考量化。"""
+"""量化已经提取出来的 Linear weight 和 calibration activation。"""
 
 from __future__ import annotations
 
@@ -73,7 +73,7 @@ def run_micromix(args: argparse.Namespace, weight: Tensor, activations: Tensor) 
 
 
 def build_parser() -> argparse.ArgumentParser:
-    parser = argparse.ArgumentParser(description="MR-GPTQ/MicroMix 独立张量参考实现")
+    parser = argparse.ArgumentParser(description="MR-GPTQ/MicroMix 张量量化工具")
     parser.add_argument("method", choices=["mr-gptq", "micromix"])
     parser.add_argument("--weight", type=Path, required=True, help="[out,in] weight Tensor")
     parser.add_argument(

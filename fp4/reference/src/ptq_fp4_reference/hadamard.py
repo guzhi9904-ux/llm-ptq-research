@@ -15,8 +15,8 @@ def is_power_of_two(value: int) -> bool:
 def block_hadamard(values: Tensor, block_size: int) -> Tensor:
     """在最后一维的独立 block 上应用正交 Hadamard transform。
 
-    该实现用于数值验证；真实部署应替换成融合 kernel。最后一维必须能被
-    block_size 整除，避免用 padding 悄悄改变线性层语义。
+    这段 PyTorch 代码主要用来检查计算是否正确，部署时需要换成融合 kernel。
+    最后一维必须能被 block_size 整除，这里不自动补零。
     """
 
     if not is_power_of_two(block_size):

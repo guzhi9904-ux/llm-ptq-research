@@ -1,8 +1,7 @@
-"""根据论文公式独立编写的 MR-GPTQ 数值参考流程。
+"""MR-GPTQ 的 PyTorch 实现。
 
-实现关注 fake-quant 精度语义：先固定原始 group grid，再可选 block Hadamard、
-static ActOrder 和 GPTQ 二阶误差补偿。没有复制 FP-Quant 仓库源码，也不包含
-QuTLASS packing 或 Blackwell kernel。
+代码先固定 group grid，再执行可选的 block Hadamard、static ActOrder 和
+GPTQ 二阶误差补偿。这里没有 QuTLASS packing 或 Blackwell kernel。
 """
 
 from __future__ import annotations
@@ -24,7 +23,7 @@ from .hadamard import block_hadamard
 
 @dataclass(frozen=True)
 class MRGPTQConfig:
-    """单个 Linear weight 的参考量化设置。"""
+    """单个 Linear weight 的量化参数。"""
 
     format_name: str = "mxfp4"
     use_rotation: bool = True
@@ -40,7 +39,7 @@ class MRGPTQConfig:
 
 @dataclass
 class MRGPTQResult:
-    """反量化 weight、固定 scale 和诊断信息。"""
+    """保存反量化 weight、scale 和中间结果。"""
 
     quantized_weight: Tensor
     rotated_weight: Tensor
@@ -131,7 +130,7 @@ def _prepare(
     if weight.ndim != 2 or weight.shape[1] != activations.shape[-1]:
         raise ValueError("weight 形状必须为 [out,in]，activation 最后一维必须等于 in")
     if config.format_name not in {"mxfp4", "nvfp4"}:
-        raise ValueError("MR-GPTQ 参考实现当前只支持 mxfp4 或 nvfp4")
+        raise ValueError("MR-GPTQ 当前只支持 mxfp4 或 nvfp4")
     spec = MX_SPECS[config.format_name]
     working_weight = weight.float().clone()
     working_activations = activations.float().clone()
@@ -154,7 +153,7 @@ def _prepare(
 def quantize_rtn(
     weight: Tensor, activations: Tensor, config: MRGPTQConfig
 ) -> MRGPTQResult:
-    """使用同一格式、rotation 和 scale 规则构造公平 RTN 基线。"""
+    """使用相同的格式、rotation 和 scale 规则运行 RTN。"""
 
     working_weight, _, _, plan, hessian = _prepare(weight, activations, config)
     quantized = plan.quantize(working_weight)
