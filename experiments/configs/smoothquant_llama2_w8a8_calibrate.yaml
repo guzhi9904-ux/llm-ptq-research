@@ -1,0 +1,32 @@
+# SmoothQuant 第一步：用 Pile validation 收集 activation channel max。
+experiment:
+  id: smoothquant_llama2_7b_calibration_512x2048_seed0
+  method: smoothquant
+  stage: calibrate
+  evidence_level: reproduction
+
+resources:
+  model: llama2_7b_local
+  dataset: pile_validation_local
+
+parameters:
+  num_samples: 512
+  sequence_length: 2048
+
+arguments:
+  - --output-path
+  - "{{ output.run_dir }}/act_scales.pt"
+  - --num-samples
+  - "512"
+  - --seq-len
+  - "2048"
+  - --dataset-path
+  - "{{ dataset.locator }}"
+
+runtime:
+  python: python
+  gpus: [0]
+  seed: 0
+
+output:
+  run_dir: "{{ roots.output_root }}/smoothquant_llama2_7b_calibration_512x2048_seed0"

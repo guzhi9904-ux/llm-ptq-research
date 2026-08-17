@@ -1,0 +1,32 @@
+# MicroMix channel 重排预处理；官方命令必须显式使用 32 条样本。
+experiment:
+  id: micromix_llama3_8b_preprocess_32x2048_seed0
+  method: micromix
+  stage: preprocess
+  evidence_level: reproduction
+
+resources:
+  model: llama3_8b_local
+  dataset: c4
+
+parameters:
+  num_samples: 32
+  sequence_length: 2048
+  activation_sort_metric: mean
+
+arguments:
+  # argparse 默认是 128，但论文分支 README 核心命令明确使用 32。
+  - --samples
+  - "32"
+  - --seqlen
+  - "2048"
+  - --act_sort_metric
+  - mean
+
+runtime:
+  python: python
+  gpus: [0]
+  seed: 0
+
+output:
+  run_dir: "{{ roots.output_root }}/micromix_llama3_8b_preprocess_32x2048_seed0"

@@ -16,6 +16,10 @@
 /experiments/**/*.npz
 /experiments/**/*.npy
 
+# 本机资源映射包含绝对路径，只提交示例文件。
+/configs/resources.local.yaml
+/configs/resources.*.local.yaml
+
 # 官方仓库未提供根目录许可证：源码仅保留在本地，不进入可发布 Git 历史。
 /fp4/methods/MR-GPTQ/upstream/
 /fp4/methods/MicroMix/upstream/

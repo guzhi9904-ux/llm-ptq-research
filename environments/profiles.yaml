@@ -1,0 +1,174 @@
+# 这里只摘录决定兼容性的关键版本；完整依赖使用 source 指向的官方文件。
+version: 1
+
+profiles:
+  gptq_legacy:
+    status: upstream_tested_versions
+    python: null
+    packages:
+      torch: 1.10.1
+      transformers: 4.21.2
+    source: int/gptq/GPTQ/upstream/README.md
+    note_zh: 原仓库只给出 tested version，LLaMA 当时还要求 Transformers main。
+
+  smoothquant:
+    status: upstream_documented
+    python: "3.8"
+    packages:
+      transformers: 4.36.0
+    source: int/smooth/SmoothQuant/upstream/README.md
+    note_zh: PyTorch 未固定；真实 INT8 kernel 环境需另行建立。
+
+  omniquant:
+    status: upstream_constraints
+    python: "3.10"
+    packages:
+      torch: ">=2.0.0"
+      transformers: ">=4.31.0"
+    source: int/rotation/OmniQuant/upstream/pyproject.toml
+    note_zh: 宽松下界不是 lock，复现时应保存最终冻结依赖。
+
+  affinequant:
+    status: upstream_constraints
+    python: "3.10"
+    packages:
+      torch: ">=2.0.0"
+      transformers: 4.35.2
+      datasets: 2.14.7
+    source: int/rotation/AffineQuant/upstream/pyproject.toml
+    note_zh: 以固定源码中的 pyproject.toml 为准。
+
+  duquant:
+    status: upstream_constraints
+    python: "3.10"
+    packages:
+      torch: ">=2.0.0"
+      transformers: 4.35.2
+      datasets: 2.17.1
+    source: int/rotation/DuQuant/upstream/requirements.txt
+    note_zh: PyTorch 只有下界，因此不能声称环境完全锁定。
+
+  quarot:
+    status: upstream_pinned
+    python: null
+    packages:
+      torch: 2.2.1
+      transformers: 4.38.0
+      datasets: 2.17.1
+      accelerate: 0.27.2
+    source: int/rotation/QuaRot/upstream/requirements.txt
+    note_zh: lm-eval 还固定到官方 requirements 中的 Git commit。
+
+  spinquant:
+    status: upstream_documented
+    python: "3.9"
+    packages:
+      torch: ">=2.0"
+      transformers: 4.44.2
+      datasets: 2.20.0
+      accelerate: 0.34.2
+    source: int/rotation/SpinQuant/upstream/requirement.txt
+    note_zh: PyTorch 只有 README 下界。
+
+  ostquant:
+    status: pip_freeze_snapshot
+    python: null
+    packages:
+      torch: 2.2.1
+      torchvision: 0.17.1
+      transformers: 4.44.0
+      datasets: 2.17.1
+      accelerate: 0.33.0
+      triton: 2.2.0
+    source: int/rotation/OSTQuant/upstream/requirements.txt
+    note_zh: 官方文件是完整 pip freeze，不是可移植的最小 requirements。
+
+  flatquant:
+    status: upstream_pinned
+    python: "3.10"
+    packages:
+      torch: ">=2.6.0"
+      transformers: 4.45.0
+      datasets: 2.17.1
+      accelerate: 0.32.0
+      lm-eval: 0.4.9.1
+      triton: ">=3.2.0"
+    source: int/rotation/FlatQuant/upstream/requirements.txt
+    note_zh: LLaMA-2 另有 requirements_llama2.txt，不能与主环境混用。
+
+  paroquant:
+    status: upstream_pinned
+    python: "3.11"
+    packages:
+      torch: 2.8.0
+      torchvision: 0.23.0
+      transformers: 4.55.2
+      datasets: 3.6.0
+      accelerate: 1.7.0
+      lm-eval: 0.4.9.1
+    source: int/rotation/ParoQuant/upstream/environment.yml
+    note_zh: 当前接入的是论文复现 legacy 分支。
+
+  q_palette:
+    status: upstream_pinned
+    python: "3.11"
+    packages:
+      torch: 2.6.0
+      transformers: 4.45.2
+      datasets: 2.20.0
+      accelerate: 0.34.2
+      lm-eval: 0.4.4
+    source: int/rotation/Q-Palette/upstream/pyproject.toml
+    note_zh: PyTorch wheel 使用 CUDA 12.4，cuda_python 依赖记录为 12.6.0。
+
+  guidedquant:
+    status: upstream_pinned
+    python: null
+    packages:
+      torch: 2.5.1
+      transformers: 4.52.3
+      datasets: 3.6.0
+      accelerate: 0.29.3
+      lm-eval: 0.4.3
+    source: int/gptq/GuidedQuant/upstream/requirements.txt
+    note_zh: 自定义 kernel 需要单独编译。
+
+  sliderquant:
+    status: upstream_pinned
+    python: "3.10"
+    packages:
+      torch: 2.4.0
+      transformers: 4.51.0
+      datasets: 2.18.0
+      accelerate: ">=1.0.0"
+      lm-eval: 0.4.7
+    source: int/rotation/SliderQuant/upstream/pyproject.toml
+    note_zh: 训练入口还依赖 task_list.conf，不应跨环境复用配置。
+
+  fp_quant:
+    status: incomplete
+    python: null
+    packages: {}
+    source: fp4/methods/MR-GPTQ/upstream/README.md
+    note_zh: 官方仓库没有 requirements 或 lock；正式复现前必须冻结可运行环境。
+
+  micromix:
+    status: upstream_pinned_partial
+    python: null
+    packages:
+      transformers: 4.45.0
+      datasets: 3.4.0
+      lm-eval: 0.4.8
+    source: fp4/methods/MicroMix/upstream/requirements.txt
+    note_zh: CUDA 12.8 与 Blackwell kernel 要求需单独记录，PyTorch 未固定。
+
+  duquant_pp:
+    status: upstream_constraints
+    python: "3.10"
+    packages:
+      torch: ">=2.0.0"
+      transformers: 4.43.1
+      datasets: 2.17.1
+      lm-eval: 0.4.4
+    source: fp4/methods/DuQuantPP/upstream/requirements.txt
+    note_zh: PyTorch 只有下界，MXFP4 kernel 能力需在目标 GPU 上另行验证。

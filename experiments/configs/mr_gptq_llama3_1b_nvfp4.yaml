@@ -1,0 +1,58 @@
+# MR-GPTQ 的 NVFP4 W4A4 核心设置；该上游目前没有根 LICENSE，只能本地运行。
+experiment:
+  id: mr_gptq_llama3_2_1b_nvfp4_w4a4_seed0
+  method: mr_gptq
+  stage: quantize_eval
+  evidence_level: reproduction
+
+resources:
+  model: llama3_2_1b_instruct_local
+  dataset: fineweb_edu
+
+parameters:
+  format: nvfp
+  weight_bits: 4
+  activation_bits: 4
+  weight_group_size: 16
+  activation_group_size: 16
+  transform: hadamard
+  hadamard_group_size: 128
+  calibration_samples: 128
+  sequence_length: 2048
+
+arguments:
+  - --format
+  - nvfp
+  - --w_bits
+  - "4"
+  - --a_bits
+  - "4"
+  - --w_group_size
+  - "16"
+  - --a_group_size
+  - "16"
+  - --transform_class
+  - hadamard
+  # 开启二阶 weight error compensation；没有该参数只是 rotation + RTN。
+  - --gptq
+  - --hadamard_group_size
+  - "128"
+  - --dataset_name_or_path
+  - "{{ dataset.locator }}"
+  - --num_sequences
+  - "128"
+  - --sequence_length
+  - "2048"
+  - --eval_perplexity
+
+runtime:
+  python: python
+  gpus: [0]
+  seed: 0
+
+environment:
+  OMP_NUM_THREADS: "8"
+  PYTORCH_CUDA_ALLOC_CONF: max_split_size_mb:128
+
+output:
+  run_dir: "{{ roots.output_root }}/mr_gptq_llama3_2_1b_nvfp4_w4a4_seed0"

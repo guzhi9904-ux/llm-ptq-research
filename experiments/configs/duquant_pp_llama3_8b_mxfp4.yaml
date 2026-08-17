@@ -1,0 +1,45 @@
+# DuQuant++ W4A4：rotation block 32 与 MXFP4 原生 block 对齐。
+experiment:
+  id: duquant_pp_llama3_8b_mxfp4_w4a4_seed2
+  method: duquant_pp
+  stage: quantize_eval
+  evidence_level: reproduction
+
+resources:
+  model: llama3_8b_local
+  dataset: c4
+
+parameters:
+  block_size: 32
+  max_rotation_step: 256
+  weight_bits: 4
+  activation_bits: 4
+  alpha: 0.6
+  use_gptq: false
+
+arguments:
+  - --block_size
+  - "32"
+  - --max_rotation_step
+  - "256"
+  - --wbits
+  - "4"
+  - --abits
+  - "4"
+  - --alpha
+  - "0.6"
+  - --smooth
+  - --eval_ppl
+  # 官方 README 拼成 --bath_size；main.py 的可执行参数是 --batch_size。
+  - --batch_size
+  - "64"
+  - --tasks
+  - arc_easy,arc_challenge,winogrande,hellaswag,openbookqa,lambada_openai,piqa
+
+runtime:
+  python: python
+  gpus: [0]
+  seed: 2
+
+output:
+  run_dir: "{{ roots.output_root }}/duquant_pp_llama3_8b_mxfp4_w4a4_seed2"

@@ -2,7 +2,7 @@
 
 本仓库用于整理大语言模型后训练量化（LLM PTQ）的代表性论文、官方实现、统一实验配置和本次研究代码。
 
-当前状态：**第二阶段——官方源码固定与许可证核查**。论文代码已从固定 Git commit 导出到各方法的 `upstream/`；没有直接复制本地第三方工作树，因此本地实验修改不会被误标为论文官方代码。
+当前状态：**第三阶段——统一环境、资源路径与复现入口**。论文代码已从固定 Git commit 导出到各方法的 `upstream/`；统一入口在仓库自有目录中解析路径和调用官方命令，不改写论文源码。
 
 ## 范围
 
@@ -35,8 +35,8 @@ llm-ptq-research/
 │   ├── formats/
 │   └── methods/
 ├── common/               # 后续统一接口，不放论文原实现
-├── configs/              # 公共实验配置
-├── environments/         # 方法隔离环境
+├── configs/              # 模型、数据集、缓存和结果路径映射
+├── environments/         # 方法隔离环境与关键版本档案
 ├── third_party/          # 经许可证核查后固定的论文源码
 ├── experiments/          # 本次研究代码与设置
 └── results/              # 结构化结果；默认不提交大模型和大缓存
@@ -74,6 +74,21 @@ METHOD/
 - 许可证核查：[`docs/license_audit.md`](docs/license_audit.md)
 - 本地修改差异：[`docs/local_diff_audit.md`](docs/local_diff_audit.md)
 - 机器可读方法清单：[`manifests/methods.csv`](manifests/methods.csv)
+- 统一复现入口：[`docs/reproduction_entry.md`](docs/reproduction_entry.md)
+- 数据集与校准协议：[`docs/dataset_protocol.md`](docs/dataset_protocol.md)
+- 本机资源模板：[`configs/resources.example.yaml`](configs/resources.example.yaml)
+
+## 统一入口快速示例
+
+```bash
+cp configs/resources.example.yaml configs/resources.local.yaml
+python experiments/runners/ptq.py list
+python experiments/runners/ptq.py show \
+  --config experiments/configs/quarot_llama2_w4a4kv4.yaml \
+  --resources configs/resources.local.yaml
+```
+
+环境只统一管理方式，不把依赖冲突的方法装进同一个 Python 环境。各方法的关键版本见 [`environments/profiles.yaml`](environments/profiles.yaml)。
 
 ## 重要限制
 

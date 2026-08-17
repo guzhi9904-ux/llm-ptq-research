@@ -1,0 +1,34 @@
+# 原始 GPTQ 的 LLaMA-2 W4A16 核心设置；参数名保持官方代码写法。
+experiment:
+  id: gptq_llama2_7b_w4a16_c4_seed0
+  method: gptq
+  stage: quantize_eval
+  evidence_level: reproduction
+
+resources:
+  model: llama2_7b_local
+  dataset: c4
+
+parameters:
+  weight_bits: 4
+  calibration_seed: 0
+  act_order: true
+  true_sequential: true
+
+arguments:
+  - --wbits
+  - "4"
+  # 按真实 block 子层顺序校准，不与普通逐层模式混写结果。
+  - --true-sequential
+  # 按 Hessian 对角线重要性调整量化列顺序。
+  - --act-order
+  # 使用论文 camera-ready 更新后的数据预处理。
+  - --new-eval
+
+runtime:
+  python: python
+  gpus: [0]
+  seed: 0
+
+output:
+  run_dir: "{{ roots.output_root }}/gptq_llama2_7b_w4a16_c4_seed0"

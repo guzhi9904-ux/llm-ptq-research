@@ -1,0 +1,39 @@
+# QuaRot fake-quant 主精度实验；真实 kernel 性能不能由该配置代替。
+experiment:
+  id: quarot_llama2_7b_w4a4kv4_rtn_seed0
+  method: quarot
+  stage: quantize_eval
+  evidence_level: reproduction
+
+resources:
+  model: llama2_7b_local
+  dataset: c4
+
+parameters:
+  weight_bits: 4
+  activation_bits: 4
+  key_bits: 4
+  value_bits: 4
+  weight_solver: rtn
+
+arguments:
+  # 开启函数保持的全局旋转和在线 Hadamard transform。
+  - --rotate
+  - --w_bits
+  - "4"
+  - --a_bits
+  - "4"
+  - --k_bits
+  - "4"
+  - --v_bits
+  - "4"
+  # 对 weight clipping 范围执行官方搜索。
+  - --w_clip
+
+runtime:
+  python: python
+  gpus: [0]
+  seed: 0
+
+output:
+  run_dir: "{{ roots.output_root }}/quarot_llama2_7b_w4a4kv4_rtn_seed0"

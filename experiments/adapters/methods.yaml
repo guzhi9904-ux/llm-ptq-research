@@ -1,0 +1,302 @@
+# 方法适配层只描述工作目录和官方入口前缀；算法参数完整写在实验配置中。
+version: 1
+
+methods:
+  gptq:
+    display_name: GPTQ
+    family: int/gptq
+    environment: gptq_legacy
+    source_policy: tracked
+    status: runnable
+    working_dir: int/gptq/GPTQ/upstream
+    stages:
+      quantize_eval:
+        description_zh: 原始 LLaMA weight-only GPTQ 与 PPL 评测入口。
+        command: ["{{ runtime.python }}", llama.py, "{{ model.locator }}", "{{ dataset.locator }}"]
+        required_files: [llama.py, gptq.py, quant.py]
+
+  smoothquant:
+    display_name: SmoothQuant
+    family: int/smooth
+    environment: smoothquant
+    source_policy: tracked
+    status: runnable
+    working_dir: int/smooth/SmoothQuant/upstream
+    stages:
+      calibrate:
+        description_zh: 收集 per-channel activation max。
+        command: ["{{ runtime.python }}", examples/generate_act_scales.py, --model-name, "{{ model.locator }}"]
+        required_files: [examples/generate_act_scales.py]
+      perplexity:
+        description_zh: 执行平滑、fake W8A8 与 PPL 评测。
+        command: ["{{ runtime.python }}", smoothquant/ppl_eval.py, --model_path, "{{ model.locator }}"]
+        required_files: [smoothquant/ppl_eval.py, smoothquant/smooth.py]
+
+  omniquant:
+    display_name: OmniQuant
+    family: int/rotation-transform
+    environment: omniquant
+    source_policy: tracked
+    status: runnable
+    working_dir: int/rotation/OmniQuant/upstream
+    stages:
+      collect_scales:
+        description_zh: 为指定模型收集 activation scale 与 shift。
+        command: ["{{ runtime.python }}", generate_act_scale_shift.py, --model, "{{ model.locator }}"]
+        required_files: [generate_act_scale_shift.py]
+      quantize_eval:
+        description_zh: LET/LWC block 重构与评测。
+        command: ["{{ runtime.python }}", main.py, --model, "{{ model.locator }}"]
+        required_files: [main.py]
+
+  affinequant:
+    display_name: AffineQuant
+    family: int/rotation-transform
+    environment: affinequant
+    source_policy: tracked
+    status: runnable
+    working_dir: int/rotation/AffineQuant/upstream
+    stages:
+      collect_scales:
+        description_zh: 为指定模型收集 activation scale 与 shift。
+        command: ["{{ runtime.python }}", generate_act_scale_shift.py, --model, "{{ model.locator }}"]
+        required_files: [generate_act_scale_shift.py]
+      quantize_eval:
+        description_zh: 可学习 affine transformation 与 clipping 评测。
+        command: ["{{ runtime.python }}", main.py, --model, "{{ model.locator }}"]
+        required_files: [main.py]
+
+  quarot:
+    display_name: QuaRot
+    family: int/rotation
+    environment: quarot
+    source_policy: tracked
+    status: runnable
+    working_dir: int/rotation/QuaRot/upstream/fake_quant
+    stages:
+      quantize_eval:
+        description_zh: QuaRot fake-quant 精度入口。
+        command: ["{{ runtime.python }}", main.py, --model, "{{ model.locator }}"]
+        required_files: [main.py, rotation_utils.py, gptq_utils.py]
+
+  duquant:
+    display_name: DuQuant
+    family: int/rotation-transform
+    environment: duquant
+    source_policy: tracked
+    status: runnable
+    working_dir: int/rotation/DuQuant/upstream
+    stages:
+      prepare_rotation:
+        description_zh: 生成所有模型共用的 rotation 基础数据。
+        command: ["{{ runtime.python }}", get_rot.py]
+        required_files: [get_rot.py]
+      collect_scales:
+        description_zh: 为指定模型收集 activation scale 与 shift。
+        command: ["{{ runtime.python }}", generate_act_scale_shift.py, --model, "{{ model.locator }}"]
+        required_files: [generate_act_scale_shift.py]
+      quantize_eval:
+        description_zh: DuQuant W4A4 主实验入口。
+        command: ["{{ runtime.python }}", main.py, --model, "{{ model.locator }}"]
+        required_files: [main.py]
+
+  spinquant:
+    display_name: SpinQuant
+    family: int/rotation
+    environment: spinquant
+    source_policy: noncommercial
+    status: runnable
+    working_dir: int/rotation/SpinQuant/upstream
+    stages:
+      optimize_rotation:
+        description_zh: 运行官方 rotation 优化脚本。
+        command: [bash, scripts/10_optimize_rotation.sh, "{{ model.locator }}"]
+        required_files: [scripts/10_optimize_rotation.sh, optimize_rotation.py]
+      quantize_eval:
+        description_zh: 使用已学习 rotation 执行 RTN/GPTQ 评测。
+        command: [bash, scripts/2_eval_ptq.sh, "{{ model.locator }}"]
+        required_files: [scripts/2_eval_ptq.sh, ptq.py]
+
+  ostquant:
+    display_name: OSTQuant
+    family: int/rotation-transform
+    environment: ostquant
+    source_policy: tracked
+    status: runnable
+    working_dir: int/rotation/OSTQuant/upstream
+    stages:
+      quantize_eval:
+        description_zh: 通过 torchrun 从头优化并评测 OSTQuant。
+        command: [torchrun, --nnodes, "1", --nproc_per_node, "{{ runtime.processes }}", --master-addr, localhost, --master-port, "{{ runtime.master_port }}", main.py, --model, "{{ model.locator }}"]
+        required_files: [main.py]
+
+  flatquant:
+    display_name: FlatQuant
+    family: int/rotation-transform
+    environment: flatquant
+    source_policy: tracked
+    status: runnable
+    working_dir: int/rotation/FlatQuant/upstream
+    stages:
+      quantize_eval:
+        description_zh: FlatQuant calibration、矩阵保存与评测入口。
+        command: ["{{ runtime.python }}", main.py, --model, "{{ model.locator }}"]
+        required_files: [main.py, gptq_utils.py]
+
+  paroquant:
+    display_name: ParoQuant
+    family: int/rotation
+    environment: paroquant
+    source_policy: tracked
+    status: runnable
+    working_dir: int/rotation/ParoQuant/upstream
+    stages:
+      optimize_4bit:
+        description_zh: legacy 分支的 4-bit 优化脚本。
+        command: [bash, experiments/optimize/4bit.sh, "{{ model.locator }}"]
+        required_files: [experiments/optimize/4bit.sh, optimize.py]
+      export_pseudo:
+        description_zh: 导出保留 FP16 权重的 pseudo-quant 模型。
+        command: ["{{ runtime.python }}", scripts/pseudo_quant.py, --model, "{{ model.locator }}"]
+        required_files: [scripts/pseudo_quant.py]
+      export_real:
+        description_zh: 导出真实 INT4 模型。
+        command: ["{{ runtime.python }}", scripts/real_quant.py, --model, "{{ model.locator }}"]
+        required_files: [scripts/real_quant.py]
+
+  q_palette:
+    display_name: Q-Palette
+    family: int/rotation-codebook
+    environment: q_palette
+    source_policy: tracked
+    status: runnable
+    working_dir: int/rotation/Q-Palette/upstream
+    stages:
+      solve_memory:
+        description_zh: 求解平均 bit 约束下的层级 quantizer 分配。
+        command: ["{{ runtime.python }}", solve_mem_const.py, --model, "{{ model.locator }}"]
+        required_files: [solve_mem_const.py]
+      evaluate:
+        description_zh: 评测已生成的 quantizer dictionary。
+        command: ["{{ runtime.python }}", eval_qdict.py]
+        required_files: [eval_qdict.py]
+
+  guidedquant:
+    display_name: GuidedQuant
+    family: int/gptq-enhancement
+    environment: guidedquant
+    source_policy: tracked
+    status: manual
+    working_dir: int/gptq/GuidedQuant/upstream
+    stages: {}
+    note_zh: 官方流程包含梯度收集、层级量化和 kernel 转换，尚未压缩成单一安全入口。
+
+  sliderquant:
+    display_name: SliderQuant
+    family: int/learned-ptq
+    environment: sliderquant
+    source_policy: tracked
+    status: manual
+    working_dir: int/rotation/SliderQuant/upstream
+    stages: {}
+    note_zh: 官方入口依赖会修改 task_list.conf 的任务队列，适配前保持手工执行。
+
+  fp4_rtn:
+    display_name: FP4 RTN baseline
+    family: fp4/baseline
+    environment: fp_quant
+    source_policy: local_only
+    status: runnable_local_only
+    working_dir: fp4/methods/MR-GPTQ/upstream
+    stages:
+      quantize_eval:
+        description_zh: 使用 FP-Quant 的格式正确 RTN 基线；配置中不得加入 --gptq。
+        command: ["{{ runtime.python }}", model_quant.py, --model_name_or_path, "{{ model.locator }}"]
+        required_files: [model_quant.py]
+
+  fp4_gptq:
+    display_name: FP4 GPTQ baseline
+    family: fp4/baseline
+    environment: fp_quant
+    source_policy: local_only
+    status: runnable_local_only
+    working_dir: fp4/methods/MR-GPTQ/upstream
+    stages:
+      quantize_eval:
+        description_zh: identity transform 下的格式正确 FP4 GPTQ 基线。
+        command: ["{{ runtime.python }}", model_quant.py, --model_name_or_path, "{{ model.locator }}"]
+        required_files: [model_quant.py]
+
+  fp4_rotation:
+    display_name: FP4 Rotation baseline
+    family: fp4/baseline
+    environment: fp_quant
+    source_policy: local_only
+    status: runnable_local_only
+    working_dir: fp4/methods/MR-GPTQ/upstream
+    stages:
+      quantize_eval:
+        description_zh: Hadamard transform + RTN，不启用 GPTQ。
+        command: ["{{ runtime.python }}", model_quant.py, --model_name_or_path, "{{ model.locator }}"]
+        required_files: [model_quant.py]
+
+  mr_gptq:
+    display_name: MR-GPTQ
+    family: fp4/format-specific
+    environment: fp_quant
+    source_policy: local_only
+    status: runnable_local_only
+    working_dir: fp4/methods/MR-GPTQ/upstream
+    stages:
+      quantize_eval:
+        description_zh: Hadamard transform 坐标系中的 FP4 GPTQ。
+        command: ["{{ runtime.python }}", model_quant.py, --model_name_or_path, "{{ model.locator }}"]
+        required_files: [model_quant.py]
+
+  micromix:
+    display_name: MicroMix
+    family: fp4/mixed-precision
+    environment: micromix
+    source_policy: local_only
+    status: runnable_local_only
+    working_dir: fp4/methods/MicroMix/upstream
+    stages:
+      preprocess:
+        description_zh: 统计 activation 并生成 channel reorder indices。
+        command: ["{{ runtime.python }}", reorder_indices.py, --model, "{{ model.locator }}"]
+        required_files: [reorder_indices.py]
+      evaluate:
+        description_zh: 官方 test.sh 精度评测入口。
+        command: [bash, test.sh, "{{ model.locator }}"]
+        required_files: [test.sh]
+
+  duquant_pp:
+    display_name: DuQuant++
+    family: fp4/rotation
+    environment: duquant_pp
+    source_policy: tracked
+    status: runnable
+    working_dir: fp4/methods/DuQuantPP/upstream
+    stages:
+      prepare_rotation:
+        description_zh: 生成 rotation 基础数据。
+        command: ["{{ runtime.python }}", get_rot.py]
+        required_files: [get_rot.py]
+      collect_scales:
+        description_zh: 收集模型 activation scale 与 shift。
+        command: ["{{ runtime.python }}", generate_act_scale_shift.py, --model, "{{ model.locator }}"]
+        required_files: [generate_act_scale_shift.py]
+      quantize_eval:
+        description_zh: MXFP4 DuQuant++ 与可选 GPTQ 评测入口。
+        command: ["{{ runtime.python }}", main.py, --model, "{{ model.locator }}"]
+        required_files: [main.py, quantize/fp4_ops.py]
+
+  mixfp4:
+    display_name: MixFP4
+    family: fp4/adaptive-format
+    environment: null
+    source_policy: unavailable
+    status: blocked
+    working_dir: fp4/methods/MixFP4
+    stages: {}
+    note_zh: 尚未定位作者官方公开代码，禁止用名称相近的第三方实现代替。

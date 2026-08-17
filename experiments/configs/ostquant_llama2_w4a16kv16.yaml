@@ -1,0 +1,54 @@
+# OSTQuant 官方四卡 W4A16KV16 脚本的显式化版本，模型和输出路径不再硬编码。
+experiment:
+  id: ostquant_llama2_7b_w4a16kv16_seed0
+  method: ostquant
+  stage: quantize_eval
+  evidence_level: reproduction
+
+resources:
+  model: llama2_7b_local
+  dataset: c4
+
+parameters:
+  weight_bits: 4
+  activation_bits: 16
+  key_bits: 16
+  value_bits: 16
+  loss_type: kl_top
+  max_steps: 100
+
+arguments:
+  - --output_dir
+  - "{{ output.run_dir }}/model_output"
+  - --loss_type=kl_top
+  - --post_attn=True
+  - --rotate_ov=True
+  - --rotate_post_rope=False
+  - --online_qk_hadamard=False
+  - --smooth_qk=True
+  - --smooth_ov=True
+  - --smooth_up_down=True
+  - --smooth_norm_linear=True
+  - --bf16=True
+  - --lm_eval=True
+  - --per_device_train_batch_size=4
+  - --max_steps=100
+  - --a_bits=16
+  - --v_bits=16
+  - --k_bits=16
+  - --down_bits=16
+  - --w_clip=True
+  - --train_enable_wquant=True
+  - --sub_mean
+  - "False"
+  - --distribute=True
+
+runtime:
+  python: python
+  gpus: [0, 1, 2, 3]
+  processes: 4
+  master_port: 8901
+  seed: 0
+
+output:
+  run_dir: "{{ roots.output_root }}/ostquant_llama2_7b_w4a16kv16_seed0"
