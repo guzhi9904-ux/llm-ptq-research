@@ -152,6 +152,15 @@ profiles:
     source: fp4/methods/MR-GPTQ/upstream/README.md
     note_zh: 官方仓库没有 requirements 或 lock；正式复现前必须冻结可运行环境。
 
+  fp4_reference:
+    status: repository_owned
+    python: null
+    packages:
+      torch: ">=2.2"
+      PyYAML: ">=6.0"
+    source: fp4/reference/pyproject.toml
+    note_zh: 本仓库独立参考实现的 CPU/GPU PyTorch 环境，不包含真实 FP4 kernel。
+
   micromix:
     status: upstream_pinned_partial
     python: null

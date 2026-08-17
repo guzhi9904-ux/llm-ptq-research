@@ -70,3 +70,7 @@ python model_quant.py \
 - 官方入口当前只支持 LLaMA 与 Qwen3；Qwen2.5 需要 adapter。
 - `realquant` 导出与 pseudo quant 精度评测分开记录。
 - Hadamard group 128 是仓库/论文选择，不是 microscaling 原生 group。
+
+## 本仓库独立参考实现
+
+由于官方固定版本没有发现覆盖整个仓库的 LICENSE，官方源码继续只保留在本地。公开仓库提供了根据论文公式重新编写的 [`fp4/reference/`](../../reference/)：包含 FP4 网格、block Hadamard、MSE scale search、static ActOrder 和 GPTQ error compensation，不包含 QuTLASS kernel，也没有复制 FP-Quant 源文件。

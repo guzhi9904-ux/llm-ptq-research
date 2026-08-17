@@ -201,6 +201,32 @@ methods:
     stages: {}
     note_zh: 官方入口依赖会修改 task_list.conf 的任务队列，适配前保持手工执行。
 
+  mr_gptq_reference:
+    display_name: MR-GPTQ independent reference
+    family: fp4/reference
+    environment: fp4_reference
+    source_policy: original_mit
+    status: synthetic_smoke_tested
+    working_dir: fp4/reference
+    stages:
+      synthetic:
+        description_zh: 不下载模型的 MR-GPTQ 合成张量测试。
+        command: ["{{ runtime.python }}", examples/synthetic_demo.py, mr-gptq]
+        required_files: [examples/synthetic_demo.py, src/ptq_fp4_reference/mr_gptq.py]
+
+  micromix_reference:
+    display_name: MicroMix independent reference
+    family: fp4/reference
+    environment: fp4_reference
+    source_policy: original_mit
+    status: synthetic_smoke_tested
+    working_dir: fp4/reference
+    stages:
+      synthetic:
+        description_zh: 不下载模型的 MicroMix 合成张量测试。
+        command: ["{{ runtime.python }}", examples/synthetic_demo.py, micromix]
+        required_files: [examples/synthetic_demo.py, src/ptq_fp4_reference/micromix.py]
+
   fp4_rtn:
     display_name: FP4 RTN baseline
     family: fp4/baseline

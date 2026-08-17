@@ -1,0 +1,33 @@
+# 本仓库独立 MicroMix 参考实现的 CPU 合成测试，不代表 Blackwell kernel 结果。
+experiment:
+  id: micromix_reference_synthetic_seed0
+  method: micromix_reference
+  stage: synthetic
+  evidence_level: controlled
+
+parameters:
+  hidden_size: 128
+  output_size: 16
+  calibration_samples: 64
+  channel_alignment: 8
+
+arguments:
+  - --hidden-size
+  - "128"
+  - --output-size
+  - "16"
+  - --samples
+  - "64"
+  - --channel-alignment
+  - "8"
+
+runtime:
+  python: python
+  gpus: []
+  seed: 0
+
+environment:
+  PYTHONPATH: "{{ repo_root }}/fp4/reference/src"
+
+output:
+  run_dir: "{{ roots.output_root }}/micromix_reference_synthetic_seed0"

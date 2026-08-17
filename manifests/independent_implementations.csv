@@ -1,0 +1,3 @@
+name,path,basis,upstream_code_copied,license,verification_status,limitations_zh
+MR-GPTQ-Reference,fp4/reference/src/ptq_fp4_reference/mr_gptq.py,arXiv:2509.23202,no,MIT,synthetic-smoke-tested,不含 QuTLASS 和全模型评测
+MicroMix-Reference,fp4/reference/src/ptq_fp4_reference/micromix.py,arXiv:2508.02343,no,MIT,synthetic-smoke-tested,不含 Blackwell kernel 且 calibration 汇总规则为公开参考选择

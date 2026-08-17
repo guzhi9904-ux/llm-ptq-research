@@ -38,3 +38,5 @@ Rotation 基线至少保留：
 - MR-GPTQ 官方默认的 Hadamard group。
 
 MXFP4 常受益于 rotation，但 NVFP4 在 absmax scale 下不一定受益。旋转强度、group size 和格式必须共同记录。
+
+本仓库的独立 PyTorch 参考基线位于 [`fp4/reference/`](../reference/)；可在相同 FP4 网格和 scale 规则下切换 identity/rotation、RTN/GPTQ，避免用不同 quantizer 比较算法名称。

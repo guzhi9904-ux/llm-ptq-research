@@ -1,0 +1,34 @@
+# 本仓库独立 MR-GPTQ 参考实现的 CPU 合成测试，不代表论文整模型结果。
+experiment:
+  id: mr_gptq_reference_synthetic_seed0
+  method: mr_gptq_reference
+  stage: synthetic
+  evidence_level: controlled
+
+parameters:
+  format: mxfp4
+  hidden_size: 128
+  output_size: 16
+  calibration_samples: 64
+  hadamard_group_size: 128
+
+arguments:
+  - --hidden-size
+  - "128"
+  - --output-size
+  - "16"
+  - --samples
+  - "64"
+  - --hadamard-group-size
+  - "128"
+
+runtime:
+  python: python
+  gpus: []
+  seed: 0
+
+environment:
+  PYTHONPATH: "{{ repo_root }}/fp4/reference/src"
+
+output:
+  run_dir: "{{ roots.output_root }}/mr_gptq_reference_synthetic_seed0"

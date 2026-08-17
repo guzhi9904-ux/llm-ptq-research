@@ -24,6 +24,10 @@
 | MicroMix `micromix` | **未发现根目录 LICENSE** | 本地快照已由 `.gitignore` 排除，不进入可发布 Git 历史 |
 | MixFP4 | 官方代码未定位 | 不导入源码 |
 
+## 本仓库独立实现
+
+`fp4/reference/` 是根据论文公开公式重新编写的仓库自有代码，采用该目录内的 MIT License。它没有复制 FP-Quant、MicroMix 或 QuTLASS 源文件，也不改变这些官方仓库的许可证状态。独立实现的名称和论文引用仅用于说明算法对应关系。
+
 ## Submodule 处理
 
 QuaRot 和 FlatQuant 的源码树引用：

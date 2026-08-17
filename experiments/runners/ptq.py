@@ -204,6 +204,9 @@ def build_plan(
     controlled_env = {
         "CUDA_VISIBLE_DEVICES": runtime["cuda_visible_devices"],
         "PYTHONHASHSEED": str(runtime["seed"]),
+        # 跨 Windows/Linux 固定子进程日志编码，避免中文输出被错误解码。
+        "PYTHONUTF8": "1",
+        "PYTHONIOENCODING": "utf-8",
         "TOKENIZERS_PARALLELISM": "false",
         "HF_HOME": f"{cache_root}/huggingface",
         "HF_DATASETS_CACHE": f"{cache_root}/huggingface/datasets",

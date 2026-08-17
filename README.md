@@ -17,6 +17,7 @@ FP4 部分分为：
 - `fp4/baselines/`：RTN、GPTQ、Rotation 三类基础基线。
 - `fp4/methods/`：MR-GPTQ、MicroMix、MixFP4、DuQuant++ 等格式专用方法。
 - `fp4/formats/`：MXFP4、NVFP4、基础 E2M1/E1M2 编码、尺度层级与模拟/真实内核定义。
+- `fp4/reference/`：根据论文公式独立编写的 MR-GPTQ、MicroMix 与 FP4 基线 PyTorch 参考实现。
 
 `experiments/` 只放本次研究自己的代码、配置、运行记录和结果，不与论文原始实现混放。
 
@@ -77,6 +78,7 @@ METHOD/
 - 统一复现入口：[`docs/reproduction_entry.md`](docs/reproduction_entry.md)
 - 数据集与校准协议：[`docs/dataset_protocol.md`](docs/dataset_protocol.md)
 - 本机资源模板：[`configs/resources.example.yaml`](configs/resources.example.yaml)
+- FP4 独立参考实现：[`fp4/reference/README.md`](fp4/reference/README.md)
 
 ## 统一入口快速示例
 

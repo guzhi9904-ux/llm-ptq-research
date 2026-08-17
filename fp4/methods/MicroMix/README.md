@@ -55,3 +55,7 @@ python benchmarks/benchmark_e2e_micromix.py \
 - `p6_num/p8_num` 的选择约束、平均 bit 预算和每层分配规则。
 - `test.sh` 的模型、数据集、任务、shot、seed 和 lm-eval 版本。
 - kernel 的实际输入布局与 scale 编码。
+
+## 本仓库独立参考实现
+
+由于官方固定版本没有发现覆盖整个仓库的 LICENSE，官方源码继续只保留在本地。公开仓库提供了根据论文公式重新编写的 [`fp4/reference/`](../../reference/)：包含 MXFP4/6/8 网格、阈值公式、activation channel 排序、离线混合精度分区和 fake quant，不包含官方 Blackwell CUDA kernel，也没有复制 MicroMix 源文件。
