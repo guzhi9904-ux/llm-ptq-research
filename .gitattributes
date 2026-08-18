@@ -29,3 +29,13 @@
 *.safetensors binary
 *.npy binary
 *.npz binary
+
+# MicroMix 上游这几个文件在官方 commit 中使用 CRLF。关闭文本归一化，
+# 使快照的 Git blob 与 c57370bc38f9 保持一致。
+fp4/methods/MicroMix/upstream/mgemm/benchmark/mxf4f6f8_bench.cu -text
+fp4/methods/MicroMix/upstream/mgemm/include/gemm_shared_storage.h -text
+fp4/methods/MicroMix/upstream/mgemm/include/gemm_utils.h -text
+fp4/methods/MicroMix/upstream/mgemm/include/kernel_sm120_multistage_tma.h -text
+fp4/methods/MicroMix/upstream/mgemm/include/kernel_sm120_multistage_tma_warpspecialized.h -text
+fp4/methods/MicroMix/upstream/mgemm/include/sm120_multistage_tma.h -text
+fp4/methods/MicroMix/upstream/mgemm/include/sm120_sf_layout.h -text

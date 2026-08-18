@@ -12,7 +12,8 @@ GuidedQuant,https://github.com/snu-mllab/GuidedQuant.git,main,62bf3b8d6b54693ecc
 Q-Palette,https://github.com/snu-mllab/Q-Palette.git,main,025f27f311774d4618fcc0d47e4c8d33ee568a6c,int/rotation/Q-Palette/upstream,MIT,remote-clone-archive,none,2026-08-17,allowed-with-license
 ParoQuant,https://github.com/z-lab/paroquant.git,origin/legacy,8e5ac77bff10e5a47fc5491eca0ab1c4370e3d85,int/rotation/ParoQuant/upstream,MIT,local-origin-ref-archive,none,2026-08-17,allowed-with-license
 SliderQuant,https://github.com/deep-optimization/SliderQuant.git,origin/main,eed0b8542f208c0e1d629ee3dd36f69416bb2a2e,int/rotation/SliderQuant/upstream,Apache-2.0,local-origin-ref-archive,none,2026-08-17,allowed-with-license
-MR-GPTQ/FP-Quant,https://github.com/IST-DASLab/FP-Quant.git,origin/master,d2e3092f968262c4de5fb050e1aef568a280dadd,fp4/methods/MR-GPTQ/upstream,NO-LICENSE-FOUND,local-origin-ref-archive,none,2026-08-17,local-research-only
-MicroMix,https://github.com/lwy2020/MicroMix.git,micromix,c57370bc38f999e1f75aada9c4b8a85baa44aaae,fp4/methods/MicroMix/upstream,NO-LICENSE-FOUND,remote-clone-archive,no,2026-08-17,local-research-only
+MR-GPTQ/FP-Quant,https://github.com/IST-DASLab/FP-Quant.git,origin/master,d2e3092f968262c4de5fb050e1aef568a280dadd,fp4/methods/MR-GPTQ/upstream,NO-LICENSE-FOUND,local-origin-ref-archive,none,2026-08-17,user-authorized-snapshot
+MicroMix,https://github.com/lwy2020/MicroMix.git,micromix,c57370bc38f999e1f75aada9c4b8a85baa44aaae,fp4/methods/MicroMix/upstream,NO-LICENSE-FOUND,remote-clone-archive,no,2026-08-17,user-authorized-snapshot
 DuQuant++,https://github.com/Hsu1023/DuQuant-v2.git,main,6c13ec07a3241f2d4ad6415a06403aef43919db9,fp4/methods/DuQuantPP/upstream,MIT,remote-clone-archive,none,2026-08-17,allowed-with-license
-MixFP4,,,UNAVAILABLE,fp4/methods/MixFP4,UNKNOWN,not-imported,unknown,2026-08-17,blocked-no-official-code
+FourOverSix,https://github.com/mit-han-lab/fouroversix.git,main,dadfad6901d473a734fe71e0b082e70ee993e23a,fp4/methods/FourOverSix/upstream,MIT,remote-clone-archive,no,2026-08-18,allowed-with-license
+MixFP4,,,UNAVAILABLE,fp4/reference/src/ptq_fp4_reference/mixfp4.py,MIT,paper-reimplementation,none,2026-08-18,no-author-code-found

@@ -4,7 +4,7 @@
 
 MR-GPTQ 出自 ICLR 2026 论文《Bridging the Gap Between Promise and Performance for Microscaling FP4 Quantization》。官方代码仓库名为 [IST-DASLab/FP-Quant](https://github.com/IST-DASLab/FP-Quant)。
 
-本地 commit 为 `d2e3092f968262c4de5fb050e1aef568a280dadd`，但有 5 项未提交变化，并且根目录未发现 LICENSE；因此当前只做逻辑参考，不直接复制源码。
+`upstream/` 是从官方 commit `d2e3092f968262c4de5fb050e1aef568a280dadd` 直接导出的干净快照，没有带入本地 5 项修改。根目录没有 LICENSE；本仓库按用户确认的上传授权保留源码，同时把这一点写在 `SOURCE.md` 中。
 
 ## 核心逻辑
 
@@ -73,4 +73,6 @@ python model_quant.py \
 
 ## 本仓库里的复现代码
 
-官方仓库根目录没有 LICENSE，所以没有把它的源码传到这里。[`fp4/reference/`](../../reference/) 里放的是我们按论文公式自己写的版本，包括 FP4 网格、block Hadamard、MSE scale search、static ActOrder 和 GPTQ error compensation。目前还没有 QuTLASS kernel。
+官方源码已经放在 [`upstream/`](upstream/)；完整模型入口是 `model_quant.py`，量化主体在 `src/quantization/`，变换代码在 `src/transforms/`。另有一份容易读和测试的独立版本放在 [`fp4/reference/`](../../reference/)，包括 FP4 网格、block Hadamard、MSE scale search、static ActOrder 和 GPTQ error compensation。
+
+论文正文的主实验使用 1024 条 FineWeb 校准序列；官方 README 的快速命令默认示例使用 128 条 FineWeb-Edu。复现实验需要明确写清使用哪一套，不能把两者当成同一个设置。

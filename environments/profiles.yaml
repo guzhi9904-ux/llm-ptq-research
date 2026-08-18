@@ -181,3 +181,13 @@ profiles:
       lm-eval: 0.4.4
     source: fp4/methods/DuQuantPP/upstream/requirements.txt
     note_zh: PyTorch 只有下界，MXFP4 kernel 能力需在目标 GPU 上另行验证。
+
+  fouroversix:
+    status: upstream_constraints
+    python: ">=3.10"
+    packages:
+      torch: ">=2.8"
+      vllm: optional
+    cuda: ">=12.8"
+    source: fp4/methods/FourOverSix/upstream/README.md
+    note_zh: 没有 Blackwell 时可设置 SKIP_CUDA_BUILD=1，只运行 PyTorch reference；真实 kernel 要求 Blackwell GPU。

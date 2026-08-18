@@ -58,3 +58,33 @@ def test_micromix_cli_writes_payload(tmp_path: Path) -> None:
     payload = torch.load(output_path, weights_only=True)
     assert payload["method"] == "micromix-reference"
     assert sum(item["end"] - item["start"] for item in payload["partitions"]) == 32
+
+
+def test_baseline_and_mixfp4_cli_write_payloads(tmp_path: Path) -> None:
+    weight_path, activation_path = save_problem(tmp_path)
+    baseline_path = tmp_path / "baseline.pt"
+    mixfp4_path = tmp_path / "mixfp4.pt"
+    common = ["--weight", str(weight_path), "--activations", str(activation_path)]
+
+    main(
+        [
+            "baseline",
+            *common,
+            "--baseline",
+            "rotation-rtn",
+            "--format",
+            "nvfp4",
+            "--hadamard-group-size",
+            "16",
+            "--output",
+            str(baseline_path),
+        ]
+    )
+    main(["mixfp4", *common, "--output", str(mixfp4_path)])
+
+    baseline = torch.load(baseline_path, weights_only=True)
+    mixfp4 = torch.load(mixfp4_path, weights_only=True)
+    assert baseline["method"] == "rotation-rtn-nvfp4-baseline"
+    assert baseline["quantizer_config"]["scale_strategy"] == "minmax"
+    assert mixfp4["method"] == "mixfp4-algorithm-1-reference"
+    assert mixfp4["use_e1m2"].shape == (5, 2)

@@ -1,3 +1,5 @@
 name,path,basis,upstream_code_copied,license,verification_status,limitations_zh
+FP4-Baselines,fp4/reference/src/ptq_fp4_reference/baselines.py,MR-GPTQ Section 5,no,MIT,synthetic-tested,不含全模型替换和 Blackwell kernel
 MR-GPTQ-Reference,fp4/reference/src/ptq_fp4_reference/mr_gptq.py,arXiv:2509.23202,no,MIT,synthetic-smoke-tested,不含 QuTLASS 和全模型评测
 MicroMix-Reference,fp4/reference/src/ptq_fp4_reference/micromix.py,arXiv:2508.02343,no,MIT,synthetic-smoke-tested,不含 Blackwell kernel；channel 数按 calibration 元素比例计算
+MixFP4-Algorithm1,fp4/reference/src/ptq_fp4_reference/mixfp4.py,arXiv:2605.31035 Algorithm 1,no,MIT,synthetic-tested,不含 E2M2 Tensor Core 和作者 kernel

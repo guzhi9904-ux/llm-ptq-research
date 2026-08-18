@@ -25,8 +25,9 @@
 | GPTQ | MXFP4/NVFP4 | 把 GPTQ 误差补偿应用到 FP4 网格 | FP-Quant 默认 update block 128、relative damping 0.01，可选 Static ActOrder | 必须说明 quantization group 与 GPTQ update block 的区别 |
 | Rotation | MXFP4/NVFP4 | 权重离线旋转，activation 在线旋转 | Hadamard group 需要显式固定 | MXFP4 与 NVFP4 对旋转反应不同，不把 full Hadamard 当通用最优基线 |
 | MR-GPTQ | MXFP4/NVFP4 | block-wise Hadamard + format-specific scale + GPTQ | 官方示例默认 Hadamard group 128、128×2048 FineWeb-Edu 校准 | 官方实现位于 FP-Quant；支持 LLaMA 与 Qwen3，不直接支持 Qwen2.5 |
-| MicroMix | MXFP4/MXFP6/MXFP8 | 按 channel 分配混合 microscaling 精度并配套 GEMM kernel | 预处理默认 32×2048、`act_sort_metric=mean`、`lamda=1.0` | ICLR 2026；本地快照没有 Git 与许可证信息 |
-| MixFP4 | NVFP4 派生 | 每个 block 自适应选择 E2M1 FP4 或 E1M2 INT4 风格表示 | 复用 NVFP4 scale hierarchy，借用 E4M3 block scale 的 sign bit 编码格式选择 | ICML 2026；代码未定位，当前只做论文级记录 |
+| MicroMix | MXFP4/MXFP6/MXFP8 | 按 channel 分配混合 microscaling 精度并配套 GEMM kernel | 预处理示例 32×2048、`act_sort_metric=mean` | ICLR 2026；官方 `micromix` 分支和 `mgemm/` 已固定 |
+| MixFP4 | NVFP4 派生 | 每个 block 自适应选择 E2M1 或 E1M2 | block 16，E4M3 scale，逐 block MSE 选择，type 写入 scale sign bit | 作者代码未定位；Algorithm 1 的 PyTorch 版本已补齐 |
+| FourOverSix | NVFP4 派生 | 为每个 block 自适应选择 scale rule | 标准 NVFP4 对照为 `static_6`；方法默认选择 4/6 scale | MIT 作者仓库、PyTorch/Triton/CUDA 实现已固定 |
 | DuQuant++ | MXFP4 | 面向 microscaling block 的细粒度 rotation | 具体默认参数待官方代码核查 | 预印本与官方仓库已定位，会议归属待确认 |
 
 ## 统一对照时禁止混用的设置

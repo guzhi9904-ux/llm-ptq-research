@@ -1,6 +1,6 @@
-# 无明确许可证源码的本地获取说明
+# 无明确根许可证的 FP4 源码
 
-FP-Quant 和 MicroMix 的作者官方仓库当前没有根目录 LICENSE。为了避免未经授权再分发，本仓库的 `.gitignore` 排除了它们的 `upstream/` 源码。
+FP-Quant 和 MicroMix 的作者官方仓库当前没有根目录 LICENSE。用户已确认本地副本可以上传，因此固定源码已经放入各自的 `upstream/`。这项确认不应被写成上游提供了 MIT、Apache 等通用许可证。
 
 ## FP-Quant / MR-GPTQ
 
@@ -9,7 +9,7 @@ FP-Quant 和 MicroMix 的作者官方仓库当前没有根目录 LICENSE。为�
 - 固定 commit：`d2e3092f968262c4de5fb050e1aef568a280dadd`
 - 本地目标：`fp4/methods/MR-GPTQ/upstream/`
 
-研究者应直接从作者仓库取得该 commit，并自行遵守作者给出的使用条件。
+该目录与 commit 中 45 个文件逐项一致，没有带入本地 5 项修改。
 
 ## MicroMix
 
@@ -23,4 +23,4 @@ MicroMix 的 ICLR 2026 分支不是仓库默认分支，获取时必须显式选
 
 ## 本仓库自己的复现代码
 
-`fp4/reference/` 放的是我们按两篇论文公式写的 PyTorch fake-quant 代码，使用 MIT License，里面没有官方源码或 CUDA kernel。目前只跑过合成张量测试，还没有完整模型结果。
+`fp4/reference/` 放的是按论文公式写的 PyTorch fake-quant 代码，使用 MIT License。它与上面的官方快照分开，不能用它的许可证覆盖第三方 `upstream/`。

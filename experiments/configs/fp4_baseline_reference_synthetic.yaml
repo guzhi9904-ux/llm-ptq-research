@@ -1,0 +1,36 @@
+# 小张量检查。论文主实验参数见 fp4/baselines/configs/baseline_matrix.yaml。
+experiment:
+  id: fp4_mxfp4_gptq_reference_seed0
+  method: fp4_baseline_reference
+  stage: synthetic
+  evidence_level: controlled
+
+parameters:
+  format: mxfp4
+  baseline: gptq
+  hidden_size: 128
+  output_size: 16
+  calibration_samples: 64
+
+arguments:
+  - --format
+  - mxfp4
+  - --baseline
+  - gptq
+  - --hidden-size
+  - "128"
+  - --output-size
+  - "16"
+  - --samples
+  - "64"
+
+runtime:
+  python: python
+  gpus: []
+  seed: 0
+
+environment:
+  PYTHONPATH: "{{ repo_root }}/fp4/reference/src"
+
+output:
+  run_dir: "{{ roots.output_root }}/fp4_mxfp4_gptq_reference_seed0"

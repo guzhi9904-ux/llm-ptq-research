@@ -1,6 +1,6 @@
 # 本地源码盘点
 
-盘点日期：2026-08-17。路径相对于当前工作区 `E:/graduateStudent/LLM Compress/project`。
+盘点日期：2026-08-18。路径相对于当前工作区 `E:/graduateStudent/LLM Compress/project`。
 
 | 方法/项目 | 本地路径 | 来源与 commit | 工作树 | 许可证观察 | 当前处理 |
 |---|---|---|---:|---|---|
@@ -13,14 +13,14 @@
 | FlatQuant | `FlatQuant/` | `ruikangliu/FlatQuant@9d88ffcb7d2c` | dirty，35 项 | MIT | 本地含 Qwen/部署修改，先保存差异 |
 | DuQuant | `DuQuant/` | `Hsu1023/DuQuant@d56cfc6fe97c` | clean | MIT | 可固定为官方参考 |
 | OSTQuant | 原工作区未下载 | `BrotherHappy/OSTQuant@ab64362da147` | clean snapshot | Apache-2.0 | 已导入新仓库 |
-| FP-Quant / MR-GPTQ | `FP-Quant/` | `IST-DASLab/FP-Quant@d2e3092f9682` | dirty，5 项 | 根目录未发现 LICENSE | 先核实授权与本地差异 |
-| MicroMix | `MicroMix-main/` | 旧快照无 Git 元数据 | unknown | 根目录未发现 LICENSE | 已重新固定官方 `micromix@c57370bc38f9`；仅本地研究 |
-| MixFP4 | 未下载 | 论文已确认 | — | 待核实 | 官方代码尚未定位 |
+| FP-Quant / MR-GPTQ | `FP-Quant/` | `IST-DASLab/FP-Quant@d2e3092f9682` | dirty，5 项 | 根目录未发现 LICENSE | `upstream/` 已从干净 commit 导出；本地修改未混入 |
+| MicroMix | `MicroMix-main/` | 旧快照无 Git 元数据 | unknown | 根目录未发现 LICENSE | 已用官方 `micromix@c57370bc38f9` 重新核对并上传 |
+| MixFP4 | 未下载 | 论文已确认 | — | 作者代码未定位 | 已按论文 Algorithm 1 独立实现 |
 | SliderQuant | `SliderQuant/` | `deep-optimization/SliderQuant@eed0b8542f20` | dirty，2 项 | Apache-2.0 | 候选扩展方法，先核实差异 |
 | AWQ | `llm-awq/` | `mit-han-lab/llm-awq@d6e797a42b9e` | clean | MIT | MLSys 2024 扩展基线，不是三大会核心清单 |
 | FlexRot-FP4 | `flexrot-fp4/` | `guzhi9904-ux/flexrot-fp4@eb5bb80b9e25` | clean | MIT | 本次实验候选代码，放 `experiments/` 路线 |
 
-新仓库另外从远端固定了 GPTQ、GuidedQuant、Q-Palette 和 DuQuant++。完整 commit 与许可证见 `manifests/upstream_sources.csv`。
+新仓库另外从远端固定了 GPTQ、GuidedQuant、Q-Palette、DuQuant++ 和 FourOverSix。完整 commit 与许可证见 `manifests/upstream_sources.csv`。
 
 ## 已有可复用核查材料
 

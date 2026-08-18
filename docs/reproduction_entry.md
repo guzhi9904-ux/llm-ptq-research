@@ -25,8 +25,9 @@
 ## 还没接好的部分
 
 - GuidedQuant 和 SliderQuant 仍为 `manual`。前者是多阶段流水线，后者会通过任务队列文件改变运行状态，需继续拆分后再开放统一运行。
-- MixFP4 为 `blocked`，原因是尚未找到作者官方公开代码。
-- MR-GPTQ/FP-Quant 与 MicroMix 为 `runnable_local_only`，因为固定源码根目录没有明确 LICENSE。
+- MixFP4 的 Algorithm 1 张量级入口已经可运行；作者 kernel 和 E2M2 硬件路径仍未公开。
+- MR-GPTQ/FP-Quant 与 MicroMix 的固定源码已经进入仓库并可运行。两者没有根目录 LICENSE，来源页会显示用户授权和再使用提醒。
+- FourOverSix 已接入 Hugging Face PTQ 入口；真实 CUDA 路径需要 CUDA 12.8 以上和 Blackwell GPU。
 - SpinQuant 为非商业许可证，入口会显示警告。
 - `show/check` 可在 Windows 本地使用；大多数论文脚本和 CUDA kernel 的正式运行环境仍是 Linux。
 - 公共日志和运行信息写入 `run_dir`。论文代码自己生成的 checkpoint 或矩阵暂时仍按原仓库的目录保存。

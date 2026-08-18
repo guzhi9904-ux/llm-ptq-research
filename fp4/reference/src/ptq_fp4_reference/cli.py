@@ -10,7 +10,9 @@ from typing import Any
 import torch
 from torch import Tensor
 
+from .baselines import FP4BaselineConfig, quantize_fp4_baseline
 from .micromix import build_micromix_plan, micromix_fake_quant
+from .mixfp4 import mixfp4_fake_quant
 from .mr_gptq import MRGPTQConfig, quantize_mr_gptq
 
 
@@ -72,9 +74,43 @@ def run_micromix(args: argparse.Namespace, weight: Tensor, activations: Tensor) 
     }
 
 
+def run_baseline(args: argparse.Namespace, weight: Tensor, activations: Tensor) -> dict[str, Any]:
+    config = FP4BaselineConfig(
+        name=args.baseline,
+        format_name=args.format,
+        hadamard_group_size=args.hadamard_group_size,
+        relative_damp=args.relative_damp,
+        update_block_size=args.update_block_size,
+    )
+    result = quantize_fp4_baseline(weight, activations, config)
+    return {
+        "method": f"{args.baseline}-{args.format}-baseline",
+        "config": vars(config),
+        "quantizer_config": vars(config.as_quantizer_config()),
+        "quantized_weight": result.quantized_weight.cpu(),
+        "column_order": result.column_order.cpu(),
+        "group_scales": result.scale_plan.scales.cpu(),
+        "weight_mse": result.weight_mse,
+    }
+
+
+def run_mixfp4(weight: Tensor) -> dict[str, Any]:
+    result = mixfp4_fake_quant(weight)
+    return {
+        "method": "mixfp4-algorithm-1-reference",
+        "config": {"block_size": 16, "selection": "per-block-mse"},
+        "quantized_weight": result.quantized_values.cpu(),
+        "use_e1m2": result.use_e1m2.cpu(),
+        "block_scales": result.block_scales.cpu(),
+        "tensor_scale": result.tensor_scale.cpu(),
+        "e2m1_mse": result.e2m1_mse.cpu(),
+        "e1m2_mse": result.e1m2_mse.cpu(),
+    }
+
+
 def build_parser() -> argparse.ArgumentParser:
-    parser = argparse.ArgumentParser(description="MR-GPTQ/MicroMix 张量量化工具")
-    parser.add_argument("method", choices=["mr-gptq", "micromix"])
+    parser = argparse.ArgumentParser(description="FP4 baseline 与论文方法张量量化工具")
+    parser.add_argument("method", choices=["baseline", "mr-gptq", "micromix", "mixfp4"])
     parser.add_argument("--weight", type=Path, required=True, help="[out,in] weight Tensor")
     parser.add_argument(
         "--activations", type=Path, required=True, help="[...,in] 校准 activation Tensor"
@@ -82,6 +118,12 @@ def build_parser() -> argparse.ArgumentParser:
     parser.add_argument("--output", type=Path, required=True)
 
     parser.add_argument("--format", choices=["mxfp4", "nvfp4"], default="mxfp4")
+    parser.add_argument(
+        "--baseline",
+        choices=["rtn", "rotation-rtn", "gptq"],
+        default="rtn",
+        help="method=baseline 时选择具体基线",
+    )
     parser.add_argument("--no-rotation", action="store_true")
     parser.add_argument("--hadamard-group-size", type=int, default=128)
     parser.add_argument("--rtn", action="store_true", help="关闭 GPTQ，生成 RTN 基线")
@@ -103,11 +145,14 @@ def main(argv: list[str] | None = None) -> None:
     activations = load_tensor(args.activations).float()
     if weight.ndim != 2 or weight.shape[-1] != activations.shape[-1]:
         raise ValueError("weight 必须为 [out,in]，且 activation 最后一维必须等于 in")
-    payload = (
-        run_mr_gptq(args, weight, activations)
-        if args.method == "mr-gptq"
-        else run_micromix(args, weight, activations)
-    )
+    if args.method == "baseline":
+        payload = run_baseline(args, weight, activations)
+    elif args.method == "mr-gptq":
+        payload = run_mr_gptq(args, weight, activations)
+    elif args.method == "micromix":
+        payload = run_micromix(args, weight, activations)
+    else:
+        payload = run_mixfp4(weight)
     args.output.parent.mkdir(parents=True, exist_ok=True)
     torch.save(payload, args.output)
     summary = {

@@ -1,25 +1,37 @@
 # MixFP4
 
-## 方法定位
+MixFP4 在 NVFP4 的每个 16 元素 block 中选择 E2M1 或 E1M2。论文为 2026 年预印本《MixFP4: Enhancing NVFP4 with Adaptive FP4/INT4 Block Representations》。截至 2026-08-18，没有找到作者明确发布的官方代码；同名第三方仓库没有论文作者说明，因此没有当作官方源码导入。
 
-MixFP4 是 ICML 2026 论文《MixFP4: Enhancing NVFP4 with Adaptive FP4/INT4 Block Representations》。当前已确认论文归属，但尚未定位作者官方代码，因此状态为 `blocked`。
+## 量化步骤
 
-## 论文级核心逻辑
+论文 Algorithm 1 给出的流程是：
 
-1. 沿用 NVFP4 的两级 scale hierarchy。
-2. 对每个 quantization block 在 E2M1 FP4 与 E1M2 INT4 风格表示之间自适应选择。
-3. 复用 E4M3 block scale 的 sign bit 编码格式选择，不增加额外 metadata。
-4. 目标是在保持 NVFP4 kernel 兼容性的同时，提高 outlier 或不同分布下的量化鲁棒性。
+1. 计算 tensor scale：`s32 = max(abs(X)) / 2688`。
+2. 每个 block 为 E2M1 计算 E4M3 scale，最大幅值按 6 处理。
+3. 同一个 block 为 E1M2 计算另一条 E4M3 scale，E1M2 乘 2 后按对称 INT4 的最大幅值 7 处理。
+4. 分别量化和反量化，比较两条路径的 block MSE。
+5. 保存误差更小的 4 bit payload 和 block scale。
+6. 用 E4M3 scale 的 sign bit 保存格式类型，不增加额外 metadata。
 
-## 基线与核心消融计划
+可运行的 PyTorch 版本在 [`../../reference/src/ptq_fp4_reference/mixfp4.py`](../../reference/src/ptq_fp4_reference/mixfp4.py)，实现了上面的 RTN 和静态格式选择：
 
-- NVFP4 RTN。
-- 固定 E2M1。
-- 固定 E1M2。
-- oracle per-block E2M1/E1M2 选择。
-- 论文 MixFP4 selector。
-- selector metadata、面积、功耗和 tensor-core overhead。
+```bash
+cd fp4/reference
+pip install -e .
+ptq-fp4-reference mixfp4 \
+  --weight weight.pt \
+  --activations calibration_inputs.pt \
+  --output mixfp4.pt
+```
 
-## 暂不填写的内容
+## 论文实验设置
 
-在找到作者官方代码前，不编造 selector 公式、阈值、校准样本数和运行命令。取得代码后，所有参数和核心实验均按中文注释规范补齐。
+- 软件主实验的 block size 为 16。
+- SmoothQuant：`wikitext-raw-v1` train，512 个样本，每个 512 token，`alpha=0.5`。
+- GPTQ：使用 FP-Quant 实现，`wikitext-raw-v1` train，1024 个样本，sequence length 2048；格式在 GPTQ 前静态选好，误差补偿时不再改变。
+- SpinQuant：100 个优化 step，每个 step 2048 token；后续 GPTQ 使用动态格式选择。
+- 主要指标包括 WikiText perplexity 和下游准确率；硬件部分另外报告 E2M2 数据通路的面积和功耗开销。
+
+## 还缺什么
+
+当前代码没有论文提出的 E2M2 Tensor Core 改动，也没有作者 kernel。它可以检查 Algorithm 1 和 GPTQ 前的静态格式选择，不能复现论文硬件面积、功耗或真实吞吐。

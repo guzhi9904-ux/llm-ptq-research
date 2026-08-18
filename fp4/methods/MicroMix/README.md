@@ -4,7 +4,7 @@
 
 MicroMix 是 ICLR 2026 的 mixed-precision microscaling PTQ 方法，联合使用 MXFP4、MXFP6 和 MXFP8，并提供面向 Blackwell 的混合精度 GEMM kernel。官方代码为 [lwy2020/MicroMix](https://github.com/lwy2020/MicroMix)。
 
-官方 `micromix@c57370bc38f999e1f75aada9c4b8a85baa44aaae` 已导入 `upstream/`。该分支根目录没有 LICENSE，因此当前只作为本地研究快照。
+官方 `micromix@c57370bc38f999e1f75aada9c4b8a85baa44aaae` 已导入 `upstream/`。该分支根目录没有 LICENSE；本仓库按用户确认的上传授权保留源码，并在 `SOURCE.md` 中记录固定版本。
 
 ## 核心逻辑
 
@@ -58,4 +58,6 @@ python benchmarks/benchmark_e2e_micromix.py \
 
 ## 本仓库里的复现代码
 
-官方仓库根目录没有 LICENSE，所以没有把它的源码传到这里。[`fp4/reference/`](../../reference/) 里放的是我们按论文公式自己写的版本，包括 MXFP4/6/8 网格、阈值公式、activation channel 排序、离线混合精度分区和 fake quant。目前还没有 Blackwell CUDA kernel。
+官方源码已经放在 [`upstream/`](upstream/)：`reorder_indices.py` 负责离线 channel 排序，`mgemm/` 是 mixed-precision CUDA kernel，`benchmarks/` 是效率测试。CUTLASS 体积较大，没有塞进主仓库，可用 [`fp4/fetch_dependencies.ps1`](../../fetch_dependencies.ps1) 拉取固定 commit。
+
+[`fp4/reference/`](../../reference/) 另有一份张量级实现，包含 MXFP4/6/8 网格、阈值公式、activation channel 排序、离线混合精度分区和 fake quant。它用于检查逻辑，不拿 CPU fake quant 时间代替官方 kernel 速度。

@@ -20,9 +20,15 @@
 /configs/resources.local.yaml
 /configs/resources.*.local.yaml
 
-# 官方仓库未提供根目录许可证：源码仅保留在本地，不进入可发布 Git 历史。
-/fp4/methods/MR-GPTQ/upstream/
-/fp4/methods/MicroMix/upstream/
+# 大型外部依赖由 fp4/fetch_dependencies.ps1 按固定 commit 拉取，不放进主仓库。
+/fp4/methods/MicroMix/upstream/cutlass/
+/fp4/methods/FourOverSix/upstream/third_party/cutlass/
+/fp4/methods/FourOverSix/upstream/third_party/fast-hadamard-transform/
+/fp4/methods/FourOverSix/upstream/third_party/flame/
+/fp4/methods/FourOverSix/upstream/third_party/fp-quant/
+/fp4/methods/FourOverSix/upstream/third_party/llm-awq/
+/fp4/methods/FourOverSix/upstream/third_party/qutlass/
+/fp4/methods/FourOverSix/upstream/third_party/spinquant/
 
 # Python and notebook state
 __pycache__/

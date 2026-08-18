@@ -12,10 +12,11 @@ INT,gptq-enhancement,GuidedQuant,ICML 2025,https://proceedings.mlr.press/v267/ki
 INT,rotation-codebook,Q-Palette,NeurIPS 2025,https://proceedings.neurips.cc/paper_files/paper/2025/hash/10df8641edc837ca49360d5fb1d182f0-Abstract-Conference.html,https://github.com/snu-mllab/Q-Palette,llm-ptq-research/int/rotation/Q-Palette/upstream,candidate,source-pinned,weight-only 分数 bit quantizer
 INT,rotation,ParoQuant,arXiv 2025,https://arxiv.org/abs/2511.10645,https://github.com/z-lab/paroquant,../paroquant,core,source-pinned,预印本且复现分支待确认
 INT,learned-ptq,SliderQuant,ICLR 2026,https://openreview.net/forum?id=YNqZqw4fLT,https://github.com/deep-optimization/SliderQuant,../SliderQuant,candidate,identified,跨层和层内 sliding PTQ
-FP4,baseline,RTN,基础基线,,,../quantization_harness,core,logic-audited,必须分别定义 MXFP4 与 NVFP4
-FP4,baseline,GPTQ,基础基线,,,../FP-Quant,core,logic-audited,FP4 网格上的二阶补偿
-FP4,baseline,Rotation,基础基线,,,../quantization_harness,core,logic-audited,identity global 与 block-local 分开
-FP4,format-specific,MR-GPTQ,ICLR 2026,https://arxiv.org/abs/2509.23202,https://github.com/IST-DASLab/FP-Quant,../FP-Quant,core,logic-audited,许可证和本地差异待核实
-FP4,mixed-precision,MicroMix,ICLR 2026,https://arxiv.org/abs/2508.02343,https://github.com/lwy2020/MicroMix,llm-ptq-research/fp4/methods/MicroMix/upstream,core,source-pinned,官方分支已固定但无根 LICENSE
-FP4,adaptive-format,MixFP4,ICML 2026,https://arxiv.org/abs/2605.31035,,,core,blocked,尚未定位作者官方代码
+FP4,baseline,RTN,基础基线,,,llm-ptq-research/fp4/reference/src/ptq_fp4_reference/baselines.py,core,synthetic-tested,MXFP4 与 NVFP4 分开配置
+FP4,baseline,GPTQ,基础基线,,,llm-ptq-research/fp4/reference/src/ptq_fp4_reference/baselines.py,core,synthetic-tested,absmax scale 默认顺序 damping 0.01
+FP4,baseline,Rotation,基础基线,,,llm-ptq-research/fp4/reference/src/ptq_fp4_reference/baselines.py,core,synthetic-tested,Hadamard group 与格式 block 对齐
+FP4,format-specific,MR-GPTQ,ICLR 2026,https://arxiv.org/abs/2509.23202,https://github.com/IST-DASLab/FP-Quant,llm-ptq-research/fp4/methods/MR-GPTQ/upstream,core,source-pinned,干净官方 commit 已上传并保留无许可证提示
+FP4,mixed-precision,MicroMix,ICLR 2026,https://arxiv.org/abs/2508.02343,https://github.com/lwy2020/MicroMix,llm-ptq-research/fp4/methods/MicroMix/upstream,core,source-pinned,官方分支与 mgemm kernel 已上传
+FP4,adaptive-format,MixFP4,2026 preprint,https://arxiv.org/abs/2605.31035,,llm-ptq-research/fp4/reference/src/ptq_fp4_reference/mixfp4.py,core,paper-reimplemented,作者代码未定位；Algorithm 1 已实现
+FP4,adaptive-scaling,FourOverSix,2025 preprint,https://arxiv.org/abs/2512.02010,https://github.com/mit-han-lab/fouroversix,llm-ptq-research/fp4/methods/FourOverSix/upstream,candidate,source-pinned,MIT；含 PyTorch Triton CUDA 代码
 FP4,rotation,DuQuant++,arXiv 2026,https://arxiv.org/abs/2604.17789,https://github.com/Hsu1023/DuQuant-v2,llm-ptq-research/fp4/methods/DuQuantPP/upstream,candidate,source-pinned,会议归属待确认

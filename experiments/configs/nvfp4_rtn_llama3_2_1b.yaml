@@ -1,0 +1,30 @@
+# 与 Four Over Six 使用同一入口，只把 activation/weight scale rule 固定为 6。
+experiment:
+  id: nvfp4_rtn_llama3_2_1b_w4a4
+  method: fouroversix
+  stage: nvfp4_rtn
+  evidence_level: upstream
+
+resources:
+  model: llama3_2_1b_instruct_local
+  dataset: wikitext2
+
+parameters:
+  format: nvfp4
+  weight_bits: 4
+  activation_bits: 4
+  block_size: 16
+  activation_scale_rule: static_6
+  weight_scale_rule: static_6
+
+arguments:
+  - --task
+  - wikitext
+
+runtime:
+  python: python
+  gpus: [0]
+  seed: 0
+
+output:
+  run_dir: "{{ roots.output_root }}/nvfp4_rtn_llama3_2_1b_w4a4"

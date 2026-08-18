@@ -214,6 +214,19 @@ methods:
         command: ["{{ runtime.python }}", examples/synthetic_demo.py, mr-gptq]
         required_files: [examples/synthetic_demo.py, src/ptq_fp4_reference/mr_gptq.py]
 
+  fp4_baseline_reference:
+    display_name: FP4 Baseline PyTorch 复现
+    family: fp4/reference
+    environment: fp4_reference
+    source_policy: original_mit
+    status: synthetic_smoke_tested
+    working_dir: fp4/reference
+    stages:
+      synthetic:
+        description_zh: 不下载模型，分别检查 RTN、Rotation + RTN 和 GPTQ。
+        command: ["{{ runtime.python }}", examples/synthetic_demo.py, baseline]
+        required_files: [examples/synthetic_demo.py, src/ptq_fp4_reference/baselines.py]
+
   micromix_reference:
     display_name: MicroMix PyTorch 复现
     family: fp4/reference
@@ -231,8 +244,8 @@ methods:
     display_name: FP4 RTN baseline
     family: fp4/baseline
     environment: fp_quant
-    source_policy: local_only
-    status: runnable_local_only
+    source_policy: user_authorized_snapshot
+    status: runnable
     working_dir: fp4/methods/MR-GPTQ/upstream
     stages:
       quantize_eval:
@@ -244,8 +257,8 @@ methods:
     display_name: FP4 GPTQ baseline
     family: fp4/baseline
     environment: fp_quant
-    source_policy: local_only
-    status: runnable_local_only
+    source_policy: user_authorized_snapshot
+    status: runnable
     working_dir: fp4/methods/MR-GPTQ/upstream
     stages:
       quantize_eval:
@@ -257,8 +270,8 @@ methods:
     display_name: FP4 Rotation baseline
     family: fp4/baseline
     environment: fp_quant
-    source_policy: local_only
-    status: runnable_local_only
+    source_policy: user_authorized_snapshot
+    status: runnable
     working_dir: fp4/methods/MR-GPTQ/upstream
     stages:
       quantize_eval:
@@ -270,8 +283,8 @@ methods:
     display_name: MR-GPTQ
     family: fp4/format-specific
     environment: fp_quant
-    source_policy: local_only
-    status: runnable_local_only
+    source_policy: user_authorized_snapshot
+    status: runnable
     working_dir: fp4/methods/MR-GPTQ/upstream
     stages:
       quantize_eval:
@@ -283,8 +296,8 @@ methods:
     display_name: MicroMix
     family: fp4/mixed-precision
     environment: micromix
-    source_policy: local_only
-    status: runnable_local_only
+    source_policy: user_authorized_snapshot
+    status: runnable
     working_dir: fp4/methods/MicroMix/upstream
     stages:
       preprocess:
@@ -317,12 +330,32 @@ methods:
         command: ["{{ runtime.python }}", main.py, --model, "{{ model.locator }}"]
         required_files: [main.py, quantize/fp4_ops.py]
 
-  mixfp4:
-    display_name: MixFP4
+  fouroversix:
+    display_name: Four Over Six
+    family: fp4/adaptive-scaling
+    environment: fouroversix
+    source_policy: tracked
+    status: runnable
+    working_dir: fp4/methods/FourOverSix/upstream
+    stages:
+      adaptive_rtn:
+        description_zh: 使用 Four Over Six 默认自适应 scale rule 做 RTN。
+        command: ["{{ runtime.python }}", -m, scripts.ptq_hf, --model-name, "{{ model.locator }}", --ptq-method, rtn]
+        required_files: [scripts/ptq_hf/__main__.py, src/fouroversix/quantize/pytorch/reference.py]
+      nvfp4_rtn:
+        description_zh: 固定 scale rule 6，作为标准 NVFP4 RTN 对照。
+        command: ["{{ runtime.python }}", -m, scripts.ptq_hf, --model-name, "{{ model.locator }}", --ptq-method, rtn, --a-scale-rule, static_6, --w-scale-rule, static_6]
+        required_files: [scripts/ptq_hf/__main__.py, src/fouroversix/quantize/pytorch/reference.py]
+
+  mixfp4_reference:
+    display_name: MixFP4 Algorithm 1 PyTorch 复现
     family: fp4/adaptive-format
-    environment: null
-    source_policy: unavailable
-    status: blocked
-    working_dir: fp4/methods/MixFP4
-    stages: {}
-    note_zh: 尚未定位作者官方公开代码，禁止用名称相近的第三方实现代替。
+    environment: fp4_reference
+    source_policy: original_mit
+    status: synthetic_smoke_tested
+    working_dir: fp4/reference
+    stages:
+      synthetic:
+        description_zh: 用合成张量检查 E2M1/E1M2 逐 block MSE 选择。
+        command: ["{{ runtime.python }}", examples/synthetic_demo.py, mixfp4]
+        required_files: [examples/synthetic_demo.py, src/ptq_fp4_reference/mixfp4.py]

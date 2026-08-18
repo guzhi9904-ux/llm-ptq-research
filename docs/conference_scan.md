@@ -2,7 +2,7 @@
 
 扫描范围默认指 ICLR、ICML 和 NeurIPS。MLSys、ACL、EMNLP 等会议中的相关方法作为扩展项，不与三大会主清单混写。
 
-更新时间：2026-08-17。
+更新时间：2026-08-18。
 
 ## 已确认的主清单
 
@@ -19,10 +19,10 @@
 | 2025 | ICML | FlatQuant | 每层可学习仿射变换、W4A4KV4 | [ruikangliu/FlatQuant](https://github.com/ruikangliu/FlatQuant) | 本地有修改 |
 | 2025 | ICML | GuidedQuant | 用最终损失梯度指导层级 PTQ | [snu-mllab/GuidedQuant](https://github.com/snu-mllab/GuidedQuant) | 已固定官方版本；候选增强方法 |
 | 2025 | NeurIPS | Q-Palette | 旋转后的 weight-only 分数 bit 量化器 | [snu-mllab/Q-Palette](https://github.com/snu-mllab/Q-Palette) | 已固定官方版本；候选扩展方法 |
-| 2026 | ICLR | MR-GPTQ / FP-Quant | 面向 MXFP4/NVFP4 的旋转与 GPTQ | [IST-DASLab/FP-Quant](https://github.com/IST-DASLab/FP-Quant) | 本地有修改；许可证待确认 |
-| 2026 | ICLR | MicroMix | MXFP4/MXFP6/MXFP8 混合精度与 kernel 共设计 | [lwy2020/MicroMix](https://github.com/lwy2020/MicroMix) | 已固定 `micromix` 分支；无根 LICENSE |
+| 2026 | ICLR | MR-GPTQ / FP-Quant | 面向 MXFP4/NVFP4 的旋转与 GPTQ | [IST-DASLab/FP-Quant](https://github.com/IST-DASLab/FP-Quant) | 干净官方 commit 已上传；无根 LICENSE |
+| 2026 | ICLR | MicroMix | MXFP4/MXFP6/MXFP8 混合精度与 kernel 共设计 | [lwy2020/MicroMix](https://github.com/lwy2020/MicroMix) | `micromix` 分支与 kernel 已上传；无根 LICENSE |
 | 2026 | ICLR | SliderQuant | 跨层和层内滑动式可学习 PTQ | [deep-optimization/SliderQuant](https://github.com/deep-optimization/SliderQuant) | 本地有少量修改 |
-| 2026 | ICML | MixFP4 | NVFP4 block 内自适应选择 FP4/INT4 表示 | 公开代码尚未定位 | 未下载；阻塞 |
+| 2026 | ICML | MixFP4 | NVFP4 block 内自适应选择 FP4/INT4 表示 | 作者代码尚未定位 | Algorithm 1 已独立实现；硬件路径未复现 |
 
 ## 预印本与扩展项
 
@@ -30,6 +30,7 @@
 |---|---|---|---|
 | ParoQuant | arXiv:2511.10645 | 硬件友好的 pairwise Givens rotation 与 channel-wise scaling | 当前不能标成三大会录用论文；main 分支与论文复现分支需区分 |
 | DuQuant++ | arXiv:2604.17789 | 把 DuQuant 的细粒度旋转扩展到 MXFP4 | 官方代码已固定；会议状态待确认 |
+| FourOverSix | arXiv:2512.02010 | 用自适应 block scale 提高 NVFP4 精度 | MIT 作者代码已固定，含 PyTorch/Triton/CUDA |
 | GPTQ-Babai | ICLR 2026 | 从 Babai nearest-plane 角度解释并改进 GPTQ | 作为 GPTQ 理论与实现扩展，不替代原始 GPTQ |
 | AWQ | MLSys 2024 Best Paper | 经典 W4 weight-only 强基线 | 不属于三大会，但本地已有干净代码 |
 | Atom | MLSys 2024 | W4A4、KV cache、mixed precision 与 kernel 共设计 | 可作为 INT4 系统实现扩展项 |
@@ -39,5 +40,5 @@
 
 - ParoQuant 当前只按公开预印本记录。
 - MR-GPTQ 是论文提出的方法名，官方仓库名为 FP-Quant；目录中会同时保留两者的对应关系。
-- MixFP4 已出现在 ICML 2026 正式论文列表，但在没有定位到作者官方代码前，不创建“已复现”或“已有代码”的标记。
+- MixFP4 的论文算法已经按 Algorithm 1 独立实现，但不能标成作者官方代码，也不能声称复现了 E2M2 硬件结果。
 - DuQuant++ 的 arXiv 标识和官方仓库已经出现，但正式会议归属仍需从权威页面确认。

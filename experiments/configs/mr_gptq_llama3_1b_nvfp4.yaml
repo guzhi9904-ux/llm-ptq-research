@@ -1,4 +1,4 @@
-# MR-GPTQ 的 NVFP4 W4A4 核心设置；该上游目前没有根 LICENSE，只能本地运行。
+# MR-GPTQ 官方 README 的 NVFP4 W4A4 快速复现设置；论文主实验校准量为 1024 条。
 experiment:
   id: mr_gptq_llama3_2_1b_nvfp4_w4a4_seed0
   method: mr_gptq

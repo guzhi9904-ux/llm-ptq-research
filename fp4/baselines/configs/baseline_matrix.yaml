@@ -1,0 +1,51 @@
+# MR-GPTQ 论文主实验中的基础对照。每条都要分别跑 MXFP4 和 NVFP4。
+paper_basis: MR-GPTQ Section 5 and Appendix I
+model: meta-llama/Llama-3.1-8B-Instruct
+calibration:
+  dataset: FineWeb
+  num_sequences: 1024       # 论文中的校准序列数
+  sequence_length: 2048     # 统一固定，避免不同入口偷偷改变 token 数
+evaluation:
+  tasks: [gsm8k, mmlu, winogrande, hellaswag]
+  seeds: 5                  # 论文对 NVFP4 报告 5 个 seed 的方差
+
+shared:
+  weight_bits: 4
+  activation_bits: 4
+  scale_strategy: minmax    # baseline 使用 absmax；MSE scale 属于 MR-GPTQ
+  gptq_relative_damp: 0.01
+  gptq_order: default       # 普通 GPTQ 不打开 static ActOrder
+
+runs:
+  - id: mxfp4_rtn
+    format: mxfp4
+    block_size: 32
+    method: rtn
+    rotation: identity
+  - id: mxfp4_rotation_rtn
+    format: mxfp4
+    block_size: 32
+    method: rtn
+    rotation: hadamard
+    hadamard_group_size: 32 # RTN + HT 与量化 block 对齐
+  - id: mxfp4_gptq
+    format: mxfp4
+    block_size: 32
+    method: gptq
+    rotation: identity
+  - id: nvfp4_rtn
+    format: nvfp4
+    block_size: 16
+    method: rtn
+    rotation: identity
+  - id: nvfp4_rotation_rtn
+    format: nvfp4
+    block_size: 16
+    method: rtn
+    rotation: hadamard
+    hadamard_group_size: 16 # NVFP4 按原生 16 元素 block 对齐
+  - id: nvfp4_gptq
+    format: nvfp4
+    block_size: 16
+    method: gptq
+    rotation: identity

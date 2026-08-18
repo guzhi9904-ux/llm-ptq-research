@@ -40,6 +40,9 @@ class MicroscalingSpec:
 
 FORMAT_SPECS = {
     "e2m1": FloatFormatSpec("E2M1", 2, 1, 1, 6.0),
+    # MixFP4 使用的 E1M2：按论文附录采用 bias=0 和 subnormal，
+    # 正数网格为 0, 0.5, 1.0, ..., 3.5。
+    "e1m2": FloatFormatSpec("E1M2", 1, 2, 0, 3.5),
     "e3m2": FloatFormatSpec("E3M2", 3, 2, 3, 28.0),
     "e2m3": FloatFormatSpec("E2M3", 2, 3, 1, 7.5),
     "e4m3": FloatFormatSpec("E4M3", 4, 3, 7, 448.0),

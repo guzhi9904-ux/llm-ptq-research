@@ -11,7 +11,7 @@
 | `c4` | GPTQ、QuaRot 等校准 | `c4` | 固定数据 revision、采样 seed 和预处理版本 |
 | `wikitext2` | PPL | `wikitext2` | 固定 raw 子集、test split 和 sequence length |
 | `pile_validation_local` | SmoothQuant activation scale | 本地 `.jsonl.zst` 路径 | 官方核心设置为 512 条、长度 2048 |
-| `fineweb_edu` | FP-Quant/MR-GPTQ 校准 | `fineweb-edu` | 官方核心设置为 128 条、长度 2048 |
+| `fineweb_edu` | FP-Quant/MR-GPTQ 快速复现 | `fineweb-edu` | 官方 README 示例为 128 条、长度 2048；论文主实验为 1024 条 FineWeb |
 
 ## 数据隔离要求
 

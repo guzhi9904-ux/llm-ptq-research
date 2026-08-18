@@ -1,0 +1,29 @@
+# Four Over Six 的旧 Hugging Face PTQ 入口；不写 scale rule 时使用方法默认自适应规则。
+experiment:
+  id: fouroversix_llama3_2_1b_w4a4_rtn
+  method: fouroversix
+  stage: adaptive_rtn
+  evidence_level: upstream
+
+resources:
+  model: llama3_2_1b_instruct_local
+  dataset: wikitext2
+
+parameters:
+  format: nvfp4
+  weight_bits: 4
+  activation_bits: 4
+  block_size: 16
+  scale_rule: adaptive_4_over_6
+
+arguments:
+  - --task
+  - wikitext
+
+runtime:
+  python: python
+  gpus: [0]
+  seed: 0
+
+output:
+  run_dir: "{{ roots.output_root }}/fouroversix_llama3_2_1b_w4a4_rtn"

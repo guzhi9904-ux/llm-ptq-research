@@ -15,9 +15,9 @@ INT 部分按方法路线组织：
 FP4 部分分为：
 
 - `fp4/baselines/`：RTN、GPTQ、Rotation 三类基础基线。
-- `fp4/methods/`：MR-GPTQ、MicroMix、MixFP4、DuQuant++ 等格式专用方法。
+- `fp4/methods/`：MR-GPTQ、MicroMix、MixFP4、FourOverSix、DuQuant++ 等格式专用方法。
 - `fp4/formats/`：MXFP4、NVFP4、基础 E2M1/E1M2 编码、尺度层级与模拟/真实内核定义。
-- `fp4/reference/`：自己编写的 MR-GPTQ、MicroMix 和 FP4 基线代码。
+- `fp4/reference/`：自己编写的 FP4 基线、MR-GPTQ、MicroMix 和 MixFP4 参考代码。
 
 `experiments/` 只放本次研究自己的代码、配置、运行记录和结果，不与论文原始实现混放。
 
@@ -79,6 +79,8 @@ METHOD/
 - 数据集与校准协议：[`docs/dataset_protocol.md`](docs/dataset_protocol.md)
 - 本机资源模板：[`configs/resources.example.yaml`](configs/resources.example.yaml)
 - FP4 复现代码：[`fp4/reference/README.md`](fp4/reference/README.md)
+- FP4 基线：[`fp4/baselines/README.md`](fp4/baselines/README.md)
+- FP4 论文源码：[`fp4/methods/`](fp4/methods/)
 
 ## 统一入口快速示例
 
@@ -96,5 +98,5 @@ python experiments/runners/ptq.py show \
 
 - 本地 `OmniQuant/`、`FlatQuant/`、`FP-Quant/` 和 `SliderQuant/` 存在修改或未跟踪文件；对应 `upstream/` 均从干净 Git ref 导出，差异没有混入。
 - SpinQuant 本地许可证为 CC BY-NC 4.0，不能按宽松开源许可证处理。
-- FP-Quant 与 MicroMix 根目录未发现许可证文件；当前快照只用于本地研究，公开发布前需要获得授权或改成外部引用。
-- QuaRot、FlatQuant 和 MicroMix 的大型 submodule 没有递归复制；`.gitmodules` 与精确 commit 单独保留。
+- FP-Quant 与 MicroMix 根目录未发现许可证文件。用户已确认本地副本可以上传；仓库仍保留缺少上游许可证的说明，避免被误当成 MIT/Apache 代码。
+- QuaRot、FlatQuant、MicroMix 和 FourOverSix 的大型外部依赖没有重复上传；FP4 依赖可以用 `fp4/fetch_dependencies.ps1` 按固定 commit 拉取。

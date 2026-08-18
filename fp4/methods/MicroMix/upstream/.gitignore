@@ -1,0 +1,6 @@
+mgemm/build
+.vscode
+__pycache__
+.ipynb_checkpoints/
+.results
+.saved

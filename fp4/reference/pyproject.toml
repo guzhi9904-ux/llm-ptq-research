@@ -4,8 +4,8 @@ build-backend = "setuptools.build_meta"
 
 [project]
 name = "llm-ptq-fp4-reference"
-version = "0.1.0"
-description = "MR-GPTQ 与 MicroMix 的 PyTorch 复现代码"
+version = "0.2.0"
+description = "FP4 baseline、MR-GPTQ、MicroMix 与 MixFP4 的 PyTorch 参考实现"
 requires-python = ">=3.10"
 dependencies = ["torch>=2.2", "PyYAML>=6.0"]
 

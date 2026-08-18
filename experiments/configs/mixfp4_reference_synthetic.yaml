@@ -1,0 +1,30 @@
+# 按论文 Algorithm 1 检查逐 block 双格式选择，不代表硬件速度。
+experiment:
+  id: mixfp4_algorithm1_reference_seed0
+  method: mixfp4_reference
+  stage: synthetic
+  evidence_level: controlled
+
+parameters:
+  block_size: 16
+  formats: [e2m1, e1m2]
+  selection: per_block_mse
+  hidden_size: 128
+  output_size: 16
+
+arguments:
+  - --hidden-size
+  - "128"
+  - --output-size
+  - "16"
+
+runtime:
+  python: python
+  gpus: []
+  seed: 0
+
+environment:
+  PYTHONPATH: "{{ repo_root }}/fp4/reference/src"
+
+output:
+  run_dir: "{{ roots.output_root }}/mixfp4_algorithm1_reference_seed0"
