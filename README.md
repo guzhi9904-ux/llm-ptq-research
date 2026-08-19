@@ -81,6 +81,7 @@ METHOD/
 - FP4 复现代码：[`fp4/reference/README.md`](fp4/reference/README.md)
 - FP4 基线：[`fp4/baselines/README.md`](fp4/baselines/README.md)
 - FP4 论文源码：[`fp4/methods/`](fp4/methods/)
+- 个人实验代码：[`experiments/personal/flexrot-fp4/`](experiments/personal/flexrot-fp4/)
 - 环境准备与轻量验证：[`environments/README.md`](environments/README.md)
 
 ## 统一入口快速示例

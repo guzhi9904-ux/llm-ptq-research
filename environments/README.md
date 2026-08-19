@@ -57,6 +57,16 @@ python experiments/runners/ptq.py doctor --method quarot
 
 各环境的关键版本和证据来源见 `profiles.yaml`。完整依赖仍以固定 `upstream/` 中的文件为准，统一清单不替代官方文件。
 
+FlexRot-FP4 是仓库自己的实验模块，建议单独建立环境：
+
+```bash
+conda env create -f experiments/personal/flexrot-fp4/environment.yml
+conda activate flexrot-fp4
+pip install -e experiments/personal/flexrot-fp4
+```
+
+CI 只补充 `datasets` 以运行数据采样单元测试，不安装 `transformers` 和 `lm-eval`，也不会下载模型或数据集。
+
 ## 仓库级轻量验证
 
 根目录的 `pyproject.toml` 已设置 FP4 参考包搜索路径。安装测试依赖后可以直接运行：

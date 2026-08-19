@@ -1,0 +1,33 @@
+[build-system]
+requires = ["setuptools>=68", "wheel"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "flexrot-fp4"
+version = "0.1.0"
+description = "面向 FP4 大模型后训练量化的可调正交旋转强度方法"
+readme = "README.md"
+requires-python = ">=3.10"
+license = {file = "LICENSE"}
+dependencies = [
+  "torch>=2.5,<2.7",
+  "transformers>=4.51,<4.58",
+  "accelerate>=1.6,<2",
+  "datasets>=3.5,<5",
+  "huggingface-hub>=0.30,<1",
+  "PyYAML>=6.0,<7",
+  "tqdm>=4.66,<5",
+  "numpy>=1.26,<3",
+  "lm-eval[hf]==0.4.12",
+]
+
+[project.optional-dependencies]
+test = ["pytest>=8.3,<9"]
+
+[tool.setuptools.packages.find]
+include = ["flexrot*"]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+addopts = "-ra"
+pythonpath = ["."]

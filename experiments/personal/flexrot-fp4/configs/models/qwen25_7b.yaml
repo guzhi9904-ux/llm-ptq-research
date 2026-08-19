@@ -1,0 +1,12 @@
+# Phase 8 同家族规模扩展：Qwen2.5-7B-Instruct。
+name: qwen25_7b
+huggingface_id: Qwen/Qwen2.5-7B-Instruct
+family: qwen2
+parameter_billions: 7.6
+dtype: bfloat16
+trust_remote_code: false
+gated: false
+architecture:
+  layer_path: model.layers
+  linear_modules: [q_proj, k_proj, v_proj, o_proj, gate_proj, up_proj, down_proj]
+  exclude_modules: [lm_head]

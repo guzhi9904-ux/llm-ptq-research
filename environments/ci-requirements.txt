@@ -1,3 +1,4 @@
 # 只安装仓库自有检查需要的轻量依赖；PyTorch CPU wheel 在 CI 中单独安装。
 PyYAML==6.0.2
 pytest==8.3.5
+datasets==3.6.0

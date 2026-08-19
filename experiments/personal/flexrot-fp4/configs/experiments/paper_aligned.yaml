@@ -1,0 +1,47 @@
+# MR-GPTQ 论文对齐协议。pilot 用于单 4090 正式预实验，paper 用于最终复现。
+experiment: paper_aligned
+models: [llama31_8b]
+formats: [nvfp4, mxfp4]
+pipelines: [rtn, gptq, mrgptq]
+
+calibration:
+  dataset: fineweb-edu
+  seq_len: 2048
+  profiles:
+    pilot:
+      num_sequences: 128
+      seeds: [42, 43, 44]
+    paper:
+      num_sequences: 1024
+      seeds: [42, 43, 44, 45, 46]
+
+evaluation:
+  ppl_dataset: wikitext2
+  ppl_seq_len: 2048
+  # PPL 是辅助指标；固定前 8 个窗口控制耗时，论文对比以四项任务为准。
+  ppl_num_windows: 8
+  baseline_openllm: true
+  flexrot_openllm: false
+  tasks:
+    winogrande: {num_fewshot: 5}
+    hellaswag: {num_fewshot: 10}
+    gsm8k_llama: {apply_chat_template: true, fewshot_as_multiturn: true}
+    mmlu_cot_llama: {apply_chat_template: true, fewshot_as_multiturn: true}
+
+baseline:
+  # 0° 为 identity；45° 才是标准 group-aligned Hadamard。
+  angles: [0.0, 45.0]
+
+flexrot:
+  # 只有 baseline 全部完成后，orchestrator 才允许进入该阶段。
+  nvfp4_angles: [0.703125, 1.40625, 2.8125, 4.21875, 5.625, 11.25, 22.5]
+  mxfp4_angles: [5.625, 11.25, 22.5, 33.75]
+
+quantization:
+  setting: W4A4
+  damping: 0.01
+  traversal_chunk: 128
+  mxfp_scale_mode: paper
+
+result_directory: results/paper_aligned
+resume: true

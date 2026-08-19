@@ -1,0 +1,14 @@
+# MXFP4 W4A4 fake-quant 规格；block=32，局部 scale 为 E8M0 的二次幂。
+name: mxfp4
+element_format: E2M1
+element_bits: 4
+block_size: 32
+local_scale_format: E8M0
+local_scale_bits: 8
+scale_rule: paper_scale_fitting_floor_log2_amax_div_3
+legacy_scale_rule: two_power_ceil_log2_amax_over_6
+default_scale_mode: paper
+exponent_min: -127
+exponent_max: 127
+zero_block_exponent: -1
+rounding: nearest_ties_to_even

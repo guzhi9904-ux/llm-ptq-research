@@ -1,0 +1,13 @@
+# Phase 8 跨模型族验证：Llama-3.1-8B-Instruct（需接受许可并登录 HF）。
+name: llama31_8b
+huggingface_id: meta-llama/Llama-3.1-8B-Instruct
+family: llama
+parameter_billions: 8.0
+dtype: bfloat16
+trust_remote_code: false
+gated: true
+requires_hf_token: true
+architecture:
+  layer_path: model.layers
+  linear_modules: [q_proj, k_proj, v_proj, o_proj, gate_proj, up_proj, down_proj]
+  exclude_modules: [lm_head]

@@ -1,0 +1,64 @@
+# 正式 FlexRot 扫描。脚本会先检查同一结果根目录下的 0°/45° 基线是否齐全。
+experiment:
+  id: flexrot_fp4_llama3_1_8b_paper_angle_scan_1024x2048
+  method: flexrot_fp4
+  stage: paper_sweep
+  evidence_level: reproduction
+
+resources:
+  model: llama3_1_8b_instruct_local
+  dataset: fineweb_edu
+
+parameters:
+  setting: W4A4
+  profile: paper
+  stage: flexrot
+  formats: [nvfp4, mxfp4]
+  pipelines: [rtn, gptq, mrgptq]
+  nvfp4_angles_deg: [0.703125, 1.40625, 2.8125, 4.21875, 5.625, 11.25, 22.5]
+  mxfp4_angles_deg: [5.625, 11.25, 22.5, 33.75]
+  calibration_samples: 1024
+  sequence_length: 2048
+  seeds: [42, 43, 44, 45, 46]
+  ppl_windows: 8
+  openllm_eval: false
+
+arguments:
+  - --profile
+  - paper
+  - --stage
+  - flexrot
+  - --models
+  - llama31_8b
+  - --formats
+  - nvfp4
+  - mxfp4
+  - --pipelines
+  - rtn
+  - gptq
+  - mrgptq
+  - --seeds
+  - "42"
+  - "43"
+  - "44"
+  - "45"
+  - "46"
+  - --device
+  - cuda
+  - --lm-eval-batch-size
+  - auto
+
+runtime:
+  python: python
+  gpus: [0]
+  seed: 42
+
+environment:
+  FLEXROT_MODEL_PATH: "{{ model.locator }}"
+  FLEXROT_MODEL_ROOT: "{{ roots.model_root }}"
+  FLEXROT_DATASET_ROOT: "{{ roots.dataset_root }}"
+  FLEXROT_CACHE_ROOT: "{{ roots.cache_root }}/flexrot_fp4"
+  FLEXROT_RESULT_ROOT: "{{ roots.output_root }}/personal/flexrot_fp4"
+
+output:
+  run_dir: "{{ roots.output_root }}/personal/flexrot_fp4/plans/paper_angle_scan"

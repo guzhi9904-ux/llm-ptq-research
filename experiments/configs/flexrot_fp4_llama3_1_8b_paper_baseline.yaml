@@ -1,0 +1,63 @@
+# 正式基线：两种 FP4 格式、三条量化流程、0°/45° 和五个种子。
+experiment:
+  id: flexrot_fp4_llama3_1_8b_paper_baseline_1024x2048
+  method: flexrot_fp4
+  stage: paper_sweep
+  evidence_level: reproduction
+
+resources:
+  model: llama3_1_8b_instruct_local
+  dataset: fineweb_edu
+
+parameters:
+  setting: W4A4
+  profile: paper
+  stage: baseline
+  formats: [nvfp4, mxfp4]
+  pipelines: [rtn, gptq, mrgptq]
+  rotation_angles_deg: [0.0, 45.0]
+  calibration_samples: 1024
+  sequence_length: 2048
+  seeds: [42, 43, 44, 45, 46]
+  ppl_windows: 8
+  openllm_tasks: [winogrande, hellaswag, gsm8k_llama, mmlu_cot_llama]
+
+arguments:
+  - --profile
+  - paper
+  - --stage
+  - baseline
+  - --models
+  - llama31_8b
+  - --formats
+  - nvfp4
+  - mxfp4
+  - --pipelines
+  - rtn
+  - gptq
+  - mrgptq
+  - --seeds
+  - "42"
+  - "43"
+  - "44"
+  - "45"
+  - "46"
+  - --device
+  - cuda
+  - --lm-eval-batch-size
+  - auto
+
+runtime:
+  python: python
+  gpus: [0]
+  seed: 42
+
+environment:
+  FLEXROT_MODEL_PATH: "{{ model.locator }}"
+  FLEXROT_MODEL_ROOT: "{{ roots.model_root }}"
+  FLEXROT_DATASET_ROOT: "{{ roots.dataset_root }}"
+  FLEXROT_CACHE_ROOT: "{{ roots.cache_root }}/flexrot_fp4"
+  FLEXROT_RESULT_ROOT: "{{ roots.output_root }}/personal/flexrot_fp4"
+
+output:
+  run_dir: "{{ roots.output_root }}/personal/flexrot_fp4/plans/paper_baseline"

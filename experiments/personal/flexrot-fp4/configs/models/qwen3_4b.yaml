@@ -1,0 +1,12 @@
+# 单 4090 显存不足时的 Qwen3 回退模型。
+name: qwen3_4b
+huggingface_id: Qwen/Qwen3-4B
+family: qwen3
+parameter_billions: 4.0
+dtype: bfloat16
+trust_remote_code: false
+gated: false
+architecture:
+  layer_path: model.layers
+  linear_modules: [q_proj, k_proj, v_proj, o_proj, gate_proj, up_proj, down_proj]
+  exclude_modules: [lm_head]

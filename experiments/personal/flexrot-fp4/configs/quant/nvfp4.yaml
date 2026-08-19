@@ -1,0 +1,11 @@
+# NVFP4 W4A4 fake-quant 规格；block=16，局部 E4M3 scale 与 FP32 global scale。
+name: nvfp4
+element_format: E2M1
+element_bits: 4
+block_size: 16
+local_scale_format: E4M3
+local_scale_bits: 8
+global_scale_format: FP32
+scale_rule: raw_amax_over_6_then_e4m3_with_global
+rounding: nearest_ties_to_even
+zero_block_rule: exact_zero_safe_divisor_one

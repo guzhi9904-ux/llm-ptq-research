@@ -5,6 +5,10 @@
 /checkpoints/
 /outputs/
 /experiments/**/models/
+!/experiments/personal/flexrot-fp4/flexrot/models/
+!/experiments/personal/flexrot-fp4/flexrot/models/**
+!/experiments/personal/flexrot-fp4/configs/models/
+!/experiments/personal/flexrot-fp4/configs/models/**
 /experiments/**/datasets/
 /experiments/**/cache/
 /experiments/**/checkpoints/

@@ -371,3 +371,28 @@ methods:
         description_zh: 用合成张量检查 E2M1/E1M2 逐 block MSE 选择。
         command: ["{{ runtime.python }}", examples/synthetic_demo.py, mixfp4]
         required_files: [examples/synthetic_demo.py, src/ptq_fp4_reference/mixfp4.py]
+
+  flexrot_fp4:
+    display_name: FlexRot-FP4
+    family: fp4/personal-experiment
+    environment: flexrot_fp4
+    source_policy: user_owned_snapshot
+    status: runnable
+    working_dir: experiments/personal/flexrot-fp4
+    stages:
+      single_run:
+        description_zh: 运行一组指定格式、量化流程和旋转角度的 FlexRot-FP4 实验。
+        command: ["{{ runtime.python }}", scripts/run_mrgptq.py]
+        required_files:
+          - scripts/run_mrgptq.py
+          - flexrot/rotation/transforms.py
+          - flexrot/quantization/nvfp4.py
+          - flexrot/quantization/mxfp4.py
+          - flexrot/gptq/gptq.py
+      paper_sweep:
+        description_zh: 按论文对齐协议运行 0°/45° 基线或 FlexRot 角度扫描。
+        command: ["{{ runtime.python }}", scripts/run_paper_experiments.py]
+        required_files:
+          - scripts/run_paper_experiments.py
+          - scripts/run_mrgptq.py
+          - configs/experiments/paper_aligned.yaml

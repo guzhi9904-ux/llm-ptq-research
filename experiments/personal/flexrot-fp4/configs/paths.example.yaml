@@ -1,0 +1,5 @@
+# 服务器路径模板：复制为 configs/paths.yaml 后按机器实际目录修改。
+model_root: /data/models
+dataset_root: /data/datasets
+cache_root: /data/flexrot_cache
+result_root: ./results

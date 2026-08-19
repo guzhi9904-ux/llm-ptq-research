@@ -1,0 +1,70 @@
+# Phase 7：Qwen2.5-1.5B-Instruct W4A4 已验证参数的完整复现配置。
+experiment: phase7_reproduction
+model: qwen25_15b
+dtype: bfloat16
+device: cuda
+random_seed: 42
+
+dataset:
+  name: wikitext2
+  huggingface_id: Salesforce/wikitext
+  subset: wikitext-2-raw-v1
+  calibration_split: train
+  evaluation_split: test
+
+calibration:
+  num_tokens: 4096
+  num_sequences: 8
+  seq_len: 512
+  # 原已验证 cache manifest 中的 WikiText-2 train token 起点；保留空白行分隔符。
+  train_starts: [1615835, 1764005, 169803, 1085975, 2144441, 2038128, 1698416, 1272185]
+  cache_storage: cpu_disk
+  chunk_rows: 256
+
+evaluation:
+  seq_len: 512
+  num_windows: 8
+  predicted_token_rule: num_windows_times_seq_len_minus_one
+  expected_predicted_tokens: 4088
+
+rotation:
+  support: native
+  uniform_all_linears: true
+  theta_grid_deg: [0.0, 5.625, 11.25, 16.875, 22.5, 33.75, 45.0]
+  nvfp4_block_size: 16
+  mxfp4_block_size: 32
+
+quantization:
+  formats: [nvfp4, mxfp4]
+  weight_bits: 4
+  activation_bits: 4
+  setting: W4A4
+
+gptq:
+  damping: 0.01
+  traversal_chunk: 128
+  static_actorder: false
+  mse_grid: false
+
+mrgptq:
+  damping: 0.01
+  traversal_chunk: 128
+  static_actorder: true
+  mse_grid: true
+  mse_grid_iters: 100
+  max_scale_shrink_factor: 0.80
+  error_norm: 2.4
+  sequential_deployment_calibration: true
+
+expected_results:
+  tolerance_relative: 0.001
+  nvfp4_rtn:
+    "0.0": 15.547818
+    "5.625": 15.301589
+    "45.0": 16.123654
+  nvfp4_mrgptq:
+    "5.625": 14.848294
+    "45.0": 15.019048
+
+result_directory: results/phase7_reproduction
+resume: true

@@ -1,0 +1,13 @@
+# Phase 8 新一代 Qwen 架构验证模型。
+name: qwen3_8b
+huggingface_id: Qwen/Qwen3-8B
+family: qwen3
+parameter_billions: 8.2
+dtype: bfloat16
+trust_remote_code: false
+gated: false
+fallback_model: qwen3_4b
+architecture:
+  layer_path: model.layers
+  linear_modules: [q_proj, k_proj, v_proj, o_proj, gate_proj, up_proj, down_proj]
+  exclude_modules: [lm_head]

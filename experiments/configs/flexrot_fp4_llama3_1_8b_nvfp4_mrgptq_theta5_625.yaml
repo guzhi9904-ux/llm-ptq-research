@@ -1,0 +1,73 @@
+# 单臂检查：NVFP4、MR-GPTQ 与 5.625° 可调旋转。
+experiment:
+  id: flexrot_fp4_llama3_1_8b_nvfp4_mrgptq_theta5_625_seed42
+  method: flexrot_fp4
+  stage: single_run
+  evidence_level: controlled
+
+resources:
+  model: llama3_1_8b_instruct_local
+  dataset: fineweb_edu
+
+parameters:
+  setting: W4A4
+  format: nvfp4
+  pipeline: mrgptq
+  rotation_angle_deg: 5.625
+  rotation_block_size: 16
+  calibration_dataset: fineweb_edu
+  calibration_samples: 128
+  sequence_length: 2048
+  evaluation_dataset: wikitext2
+  evaluation_windows: 8
+  damping: 0.01
+  traversal_chunk: 128
+  openllm_eval: false
+
+arguments:
+  - --model
+  - llama31_8b
+  - --format
+  - nvfp4
+  - --pipeline
+  - mrgptq
+  - --theta-deg
+  - "5.625"
+  - --device
+  - cuda
+  - --calibration-dataset
+  - fineweb-edu
+  - --calibration-seq-len
+  - "2048"
+  - --num-calibration-sequences
+  - "128"
+  - --calibration-seed
+  - "42"
+  - --eval-seq-len
+  - "2048"
+  - --num-eval-windows
+  - "8"
+  - --damping
+  - "0.01"
+  - --traversal-chunk
+  - "128"
+  - --mxfp-scale-mode
+  - paper
+  - --output-dir
+  - "{{ roots.output_root }}/personal/flexrot_fp4/single/nvfp4_mrgptq_theta5_625_seed42"
+  - --resume
+
+runtime:
+  python: python
+  gpus: [0]
+  seed: 42
+
+environment:
+  FLEXROT_MODEL_PATH: "{{ model.locator }}"
+  FLEXROT_MODEL_ROOT: "{{ roots.model_root }}"
+  FLEXROT_DATASET_ROOT: "{{ roots.dataset_root }}"
+  FLEXROT_CACHE_ROOT: "{{ roots.cache_root }}/flexrot_fp4"
+  FLEXROT_RESULT_ROOT: "{{ roots.output_root }}/personal/flexrot_fp4"
+
+output:
+  run_dir: "{{ roots.output_root }}/personal/flexrot_fp4/plans/single_nvfp4_mrgptq_theta5_625_seed42"

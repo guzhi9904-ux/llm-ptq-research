@@ -1,0 +1,52 @@
+# Phase 8：冻结 Phase 7 定性结论后进行跨规模、跨代际和跨模型族验证。
+experiment: phase8_cross_model
+models: [qwen25_7b, qwen3_8b, llama31_8b]
+fallback_models:
+  qwen3_8b: qwen3_4b
+dtype: bfloat16
+device: cuda
+random_seed: 42
+
+dataset:
+  name: wikitext2
+  calibration_split: train
+  evaluation_split: test
+
+calibration:
+  num_tokens: 4096
+  num_sequences: 8
+  seq_len: 512
+  cache_storage: cpu_disk
+
+evaluation:
+  seq_len: 512
+  num_windows: 8
+  expected_predicted_tokens: 4088
+
+nvfp4_angles: [0.0, 5.625, 11.25, 22.5, 45.0]
+mxfp4_angles: [0.0, 22.5, 33.75, 45.0]
+pipelines: [rtn, mrgptq]
+optional_pipelines: [gptq]
+
+gptq:
+  damping: 0.01
+  traversal_chunk: 128
+  static_actorder: false
+  mse_grid: false
+
+mrgptq:
+  damping: 0.01
+  traversal_chunk: 128
+  static_actorder: true
+  mse_grid: true
+  sequential_deployment_calibration: true
+
+memory:
+  single_model_instance: true
+  layer_wise: true
+  current_layer_hessian_only: true
+  calibration_cache_device: cpu
+  release_after_layer: true
+
+result_directory: results/phase8_cross_model
+resume: true

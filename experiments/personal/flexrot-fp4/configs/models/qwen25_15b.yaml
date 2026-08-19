@@ -1,0 +1,12 @@
+# Phase 7 已完整验证的 Qwen2.5-1.5B-Instruct 模型配置。
+name: qwen25_15b
+huggingface_id: Qwen/Qwen2.5-1.5B-Instruct
+family: qwen2
+parameter_billions: 1.5
+dtype: bfloat16
+trust_remote_code: false
+gated: false
+architecture:
+  layer_path: model.layers
+  linear_modules: [q_proj, k_proj, v_proj, o_proj, gate_proj, up_proj, down_proj]
+  exclude_modules: [lm_head]

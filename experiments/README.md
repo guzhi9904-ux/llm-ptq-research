@@ -11,8 +11,11 @@ experiments/
 ├── runners/ptq.py           # list/show/check/doctor/run 统一入口
 ├── tests/                   # 不需要 GPU 的配置与预检测试
 ├── diagnostics/             # 后续层级误差与量化格式诊断
-└── summaries/               # 中文实验总结
+├── summaries/               # 中文实验总结
+└── personal/                # 自己的实验源码、协议和测试
 ```
+
+当前个人实验先放入 [`personal/flexrot-fp4/`](personal/flexrot-fp4/)：它研究 NVFP4/MXFP4 下可调旋转强度，并包含 RTN、GPTQ、MR-GPTQ、WikiText-2 PPL 和论文对齐实验入口。
 
 当前配置已经覆盖注册表中的每个方法阶段。多阶段方法会把预处理、量化和评测拆成不同 YAML；前一阶段的产物路径会在后一阶段配置中明确写出。
 

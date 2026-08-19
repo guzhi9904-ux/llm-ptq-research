@@ -1,0 +1,21 @@
+# FlexRot-FP4 推荐 Conda 环境；CUDA 小版本可按服务器驱动兼容性调整。
+name: flexrot-fp4
+channels:
+  - pytorch
+  - nvidia
+  - conda-forge
+dependencies:
+  - python=3.10
+  - pip>=24
+  - pytorch=2.5
+  - pytorch-cuda=12.1
+  - numpy>=1.26
+  - pyyaml>=6.0
+  - pytest>=8.3
+  - pip:
+      - transformers>=4.51,<4.58
+      - accelerate>=1.6,<2
+      - datasets>=3.5,<5
+      - huggingface-hub>=0.30,<1
+      - tqdm>=4.66,<5
+      - lm-eval[hf]==0.4.12
