@@ -10,10 +10,10 @@ jobs:
     timeout-minutes: 20
     steps:
       - name: 取得代码
-        uses: actions/checkout@v4
+        uses: actions/checkout@v7
 
       - name: 准备 Python
-        uses: actions/setup-python@v5
+        uses: actions/setup-python@v7
         with:
           python-version: "3.11"
           cache: pip
