@@ -1,0 +1,27 @@
+# Q-Palette 在平均 3.25 bit 内存预算下求解逐层 quantizer dictionary。
+experiment:
+  id: q_palette_llama3_1_8b_mem325_seed0
+  method: q_palette
+  stage: solve_memory
+  evidence_level: reproduction
+
+resources:
+  model: llama3_1_8b_local
+  dataset: wikitext2
+
+parameters:
+  target_average_bits: 3.25
+  quantizer_type: default
+  importance_key: err
+
+arguments:
+  - --target_bitwidth
+  - "3.25"
+
+runtime:
+  python: python
+  gpus: []
+  seed: 0
+
+output:
+  run_dir: "{{ roots.output_root }}/q_palette_llama3_1_8b_mem325/solve"

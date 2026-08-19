@@ -1,0 +1,37 @@
+# 为 OmniQuant W4A4 收集每个 activation channel 的最大值和最小值统计。
+experiment:
+  id: omniquant_llama2_7b_prepare_128x2048_seed2
+  method: omniquant
+  stage: collect_scales
+  evidence_level: reproduction
+
+resources:
+  model: llama2_7b_local
+  dataset: wikitext2
+
+parameters:
+  calibration_samples: 128
+  sequence_length: 2048
+  calibration_seed: 2
+
+arguments:
+  - --scales-output-path
+  - "{{ output.run_dir }}/act_scales"
+  - --shifts-output-path
+  - "{{ output.run_dir }}/act_shifts"
+  - --calib_dataset
+  - wikitext2
+  - --num-samples
+  - "128"
+  - --seq-len
+  - "2048"
+  - --seed
+  - "2"
+
+runtime:
+  python: python
+  gpus: [0]
+  seed: 2
+
+output:
+  run_dir: "{{ roots.output_root }}/omniquant_llama2_7b_w4a4/prepare"

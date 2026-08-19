@@ -1,0 +1,27 @@
+# MicroMix 官方 test.sh 依次运行 zero-shot、5-shot MMLU 和 WikiText-2 PPL。
+experiment:
+  id: micromix_llama3_8b_evaluate_seed0
+  method: micromix
+  stage: evaluate
+  evidence_level: reproduction
+
+resources:
+  model: llama3_8b_local
+  dataset: wikitext2
+
+parameters:
+  activation_sort_metric: mean
+  zero_shot_tasks: [piqa, arc_challenge, boolq, winogrande, lambada_openai]
+  mmlu_fewshot: 5
+  evaluate_perplexity: true
+  kv_cache: true
+
+arguments: []
+
+runtime:
+  python: python
+  gpus: [0]
+  seed: 0
+
+output:
+  run_dir: "{{ roots.output_root }}/micromix_llama3_8b/evaluate"

@@ -1,0 +1,55 @@
+# MR-GPTQ 主表的 MXFP4 RTN 基线：不旋转、不启用 GPTQ，使用 minmax/absmax scale。
+experiment:
+  id: fp4_mxfp4_rtn_llama3_1_8b_1024x2048_seed42
+  method: fp4_rtn
+  stage: quantize_eval
+  evidence_level: reproduction
+
+resources:
+  model: llama3_1_8b_instruct_local
+  dataset: fineweb_edu
+
+parameters:
+  format: mxfp4
+  weight_bits: 4
+  activation_bits: 4
+  weight_group_size: 32
+  activation_group_size: 32
+  scale_precision: e8m0
+  transform: identity
+  weight_observer: minmax
+  calibration_samples: 1024
+  sequence_length: 2048
+
+arguments:
+  - --dataset_name_or_path
+  - "{{ dataset.locator }}"
+  - --format
+  - mxfp
+  - --scale_precision
+  - e8m0
+  - --w_bits
+  - "4"
+  - --a_bits
+  - "4"
+  - --w_group_size
+  - "32"
+  - --a_group_size
+  - "32"
+  - --w_observer
+  - minmax
+  - --transform_class
+  - identity
+  - --num_sequences
+  - "1024"
+  - --sequence_length
+  - "2048"
+  - --eval_perplexity
+
+runtime:
+  python: python
+  gpus: [0]
+  seed: 42
+
+output:
+  run_dir: "{{ roots.output_root }}/fp4_baselines/mxfp4_rtn_llama3_1_8b"

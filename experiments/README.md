@@ -14,6 +14,10 @@ experiments/
 └── summaries/               # 中文实验总结
 ```
 
+当前配置已经覆盖注册表中的每个方法阶段。多阶段方法会把预处理、量化和评测拆成不同 YAML；前一阶段的产物路径会在后一阶段配置中明确写出。
+
+FP4 基线的六个完整模型配置分别覆盖 MXFP4/NVFP4 下的 RTN、Rotation + RTN 和 GPTQ。它们只完成参数和命令核对，尚未产生模型级结果。
+
 ## 最短使用流程
 
 ```bash
@@ -51,6 +55,18 @@ python experiments/runners/ptq.py run \
 - 模型 revision、数据 revision、split、seed、序列长度和校准样本数必须显式记录。
 - `paper-reported`、`upstream-default`、`reproduction` 和 `controlled` 不得混写。
 - 默认不提交模型、缓存、checkpoint 和原始大日志。
+
+## 不跑模型时的检查
+
+```bash
+# 检查每个 adapter stage 都有配置、入口文件存在、本地 Markdown 链接有效。
+python tools/validate_repository.py
+
+# 从仓库根目录运行 runner 与 FP4 合成张量测试。
+python -m pytest -q
+```
+
+这两条命令只能证明配置可以解析、轻量算法路径正常，不能证明论文精度和 kernel 性能已经复现。
 
 ## 运行产物
 

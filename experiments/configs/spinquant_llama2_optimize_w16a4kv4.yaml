@@ -1,0 +1,76 @@
+# GPTQ W4A4KV4 前先在 W16A4KV4 网络上学习 rotation，避免与 weight GPTQ 同时优化。
+experiment:
+  id: spinquant_llama2_7b_optimize_w16a4kv4_seed0
+  method: spinquant
+  stage: optimize_rotation
+  evidence_level: reproduction
+
+resources:
+  model: llama2_7b_local
+  dataset: wikitext2
+
+parameters:
+  weight_bits_during_rotation: 16
+  activation_bits: 4
+  key_bits: 4
+  value_bits: 4
+  max_steps: 100
+  learning_rate: 1.5
+  sequence_length: 2048
+
+arguments:
+  - --output_rotation_path
+  - "{{ output.run_dir }}/R.bin"
+  - --output_dir
+  - "{{ output.run_dir }}/trainer"
+  - --logging_dir
+  - "{{ output.run_dir }}/logs"
+  - --model_max_length
+  - "2048"
+  - --fp16
+  - "False"
+  - --bf16
+  - "True"
+  - --log_on_each_node
+  - "False"
+  - --per_device_train_batch_size
+  - "1"
+  - --logging_steps
+  - "1"
+  - --learning_rate
+  - "1.5"
+  - --weight_decay
+  - "0"
+  - --lr_scheduler_type
+  - cosine
+  - --gradient_checkpointing
+  - "True"
+  - --save_safetensors
+  - "False"
+  - --max_steps
+  - "100"
+  - --w_bits
+  - "16"
+  - --a_bits
+  - "4"
+  - --k_bits
+  - "4"
+  - --v_bits
+  - "4"
+  - --w_clip
+  - --a_asym
+  - --k_asym
+  - --v_asym
+  - --k_groupsize
+  - "128"
+  - --v_groupsize
+  - "128"
+
+runtime:
+  python: python
+  gpus: [0, 1, 2, 3, 4, 5, 6, 7]
+  processes: 8
+  seed: 0
+
+output:
+  run_dir: "{{ roots.output_root }}/spinquant_llama2_7b_w4a4kv4/rotation"

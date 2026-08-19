@@ -1,0 +1,64 @@
+# FlatQuant LLaMA-3-8B W4A4KV4 主设置，保留论文仓库的 15 epoch 和 KV group 128。
+experiment:
+  id: flatquant_llama3_8b_w4a4kv4_seed0
+  method: flatquant
+  stage: quantize_eval
+  evidence_level: reproduction
+
+resources:
+  model: llama3_8b_local
+  dataset: wikitext2
+
+parameters:
+  weight_bits: 4
+  activation_bits: 4
+  key_bits: 4
+  value_bits: 4
+  key_group_size: 128
+  value_group_size: 128
+  calibration_samples: 128
+  calibration_batch_size: 4
+  epochs: 15
+  flat_learning_rate: 0.005
+
+arguments:
+  - --w_bits
+  - "4"
+  - --a_bits
+  - "4"
+  - --k_bits
+  - "4"
+  - --k_asym
+  - --k_groupsize
+  - "128"
+  - --v_bits
+  - "4"
+  - --v_asym
+  - --v_groupsize
+  - "128"
+  - --nsamples
+  - "128"
+  - --cali_bsz
+  - "4"
+  - --epochs
+  - "15"
+  - --flat_lr
+  - "0.005"
+  - --lwc
+  - --lac
+  - --cali_trans
+  - --add_diag
+  - --output_dir
+  - "{{ output.run_dir }}/model_output"
+  - --save_matrix
+  - --lm_eval
+  - --lm_eval_batch_size
+  - "16"
+
+runtime:
+  python: python
+  gpus: [0]
+  seed: 0
+
+output:
+  run_dir: "{{ roots.output_root }}/flatquant_llama3_8b_w4a4kv4"

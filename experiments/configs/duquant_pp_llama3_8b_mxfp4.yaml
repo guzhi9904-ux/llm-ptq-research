@@ -28,6 +28,10 @@ arguments:
   - "4"
   - --alpha
   - "0.6"
+  - --act-scales
+  - "{{ roots.output_root }}/duquant_pp_llama3_8b_mxfp4/prepare/act_scales/Llama-3-8B.pt"
+  - --act-shifts
+  - "{{ roots.output_root }}/duquant_pp_llama3_8b_mxfp4/prepare/act_shifts/Llama-3-8B.pt"
   - --smooth
   - --eval_ppl
   # 官方 README 拼成 --bath_size；main.py 的可执行参数是 --batch_size。

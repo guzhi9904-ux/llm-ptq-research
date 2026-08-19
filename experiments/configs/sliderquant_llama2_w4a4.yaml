@@ -1,0 +1,51 @@
+# 直接调用 SliderQuant main.py，避免 auto_train_ddp.sh 修改 task_list.conf 和等待 GPU 锁。
+experiment:
+  id: sliderquant_llama2_7b_w4a4_seed2
+  method: sliderquant
+  stage: direct_quantize_eval
+  evidence_level: upstream
+
+resources:
+  model: llama2_7b_local
+  dataset: wikitext2
+
+parameters:
+  weight_bits: 4
+  activation_bits: 4
+  epochs: 20
+  calibration_samples: 128
+  middle_window_size: 4
+  middle_window_stride: 2
+  intra_layer_quant_steps: 2
+  intra_layer_quant_rate: 0.5
+
+arguments:
+  - --config
+  - configs/llama2-7b-w4a4/config.yaml
+  - --output_dir
+  - "{{ output.run_dir }}/model_output"
+  - --wbits
+  - "4"
+  - --abits
+  - "4"
+  - --epochs
+  - "20"
+  - --nsamples
+  - "128"
+  - --num_layer
+  - "4"
+  - --sliding_layer
+  - "2"
+  - --quant_step
+  - "2"
+  - --quant_rate
+  - "0.5"
+  - --eval_ppl
+
+runtime:
+  python: python
+  gpus: [0]
+  seed: 2
+
+output:
+  run_dir: "{{ roots.output_root }}/sliderquant_llama2_7b_w4a4"

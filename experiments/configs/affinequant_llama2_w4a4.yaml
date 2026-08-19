@@ -1,0 +1,50 @@
+# AffineQuant W4A4：学习 affine matrix，并使用增强重构损失和稳定因子 0.1。
+experiment:
+  id: affinequant_llama2_7b_w4a4_matrix_seed2
+  method: affinequant
+  stage: quantize_eval
+  evidence_level: reproduction
+
+resources:
+  model: llama2_7b_local
+  dataset: wikitext2
+
+parameters:
+  weight_bits: 4
+  activation_bits: 4
+  calibration_samples: 128
+  epochs: 20
+  use_matrix: true
+  augmented_loss: true
+  stability_factor: 0.1
+
+arguments:
+  - --output_dir
+  - "{{ output.run_dir }}/model_output"
+  - --eval_ppl
+  - --wbits
+  - "4"
+  - --abits
+  - "4"
+  - --epochs
+  - "20"
+  - --let
+  - --lwc
+  - --aug_loss
+  - --use_matrix
+  - --sf
+  - "0.1"
+  - --act-scales
+  - "{{ roots.output_root }}/affinequant_llama2_7b_w4a4/prepare/act_scales/Llama-2-7b.pt"
+  - --act-shifts
+  - "{{ roots.output_root }}/affinequant_llama2_7b_w4a4/prepare/act_shifts/Llama-2-7b.pt"
+  - --tasks
+  - hendrycksTest,piqa,arc_easy,arc_challenge,boolq,hellaswag,winogrande
+
+runtime:
+  python: python
+  gpus: [0]
+  seed: 2
+
+output:
+  run_dir: "{{ roots.output_root }}/affinequant_llama2_7b_w4a4/quantize"

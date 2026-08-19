@@ -1,0 +1,27 @@
+# 把 optimize 阶段的逐层参数合并成保留 FP16 权重的 pseudo-quant 模型。
+experiment:
+  id: paroquant_qwen3_8b_export_pseudo
+  method: paroquant
+  stage: export_pseudo
+  evidence_level: upstream
+
+resources:
+  model: qwen3_8b_local
+
+parameters:
+  source_artifact: int/rotation/ParoQuant/upstream/output/Qwen3-8B
+  export_type: pseudo_quant_fp16_storage
+
+arguments:
+  - --result-dir
+  - output/Qwen3-8B
+  - --output-path
+  - "{{ output.run_dir }}/model"
+
+runtime:
+  python: python
+  gpus: [0]
+  seed: 0
+
+output:
+  run_dir: "{{ roots.output_root }}/paroquant_qwen3_8b_int4/export_pseudo"

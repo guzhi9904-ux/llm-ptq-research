@@ -81,6 +81,7 @@ METHOD/
 - FP4 复现代码：[`fp4/reference/README.md`](fp4/reference/README.md)
 - FP4 基线：[`fp4/baselines/README.md`](fp4/baselines/README.md)
 - FP4 论文源码：[`fp4/methods/`](fp4/methods/)
+- 环境准备与轻量验证：[`environments/README.md`](environments/README.md)
 
 ## 统一入口快速示例
 
@@ -93,6 +94,15 @@ python experiments/runners/ptq.py show \
 ```
 
 环境只统一管理方式，不把依赖冲突的方法装进同一个 Python 环境。各方法的关键版本见 [`environments/profiles.yaml`](environments/profiles.yaml)。
+
+不下载模型的仓库检查可以直接从根目录运行：
+
+```bash
+python tools/validate_repository.py
+python -m pytest -q
+```
+
+GitHub Actions 使用 CPU 执行同一套检查，不运行论文模型和 CUDA kernel。
 
 ## 重要限制
 

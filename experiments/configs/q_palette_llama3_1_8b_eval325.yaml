@@ -1,0 +1,33 @@
+# 评测上一步产生的 3.25 bit qdict；Q-Palette 默认 PPL context size 为 8192。
+experiment:
+  id: q_palette_llama3_1_8b_eval325_seed0
+  method: q_palette
+  stage: evaluate
+  evidence_level: reproduction
+
+resources:
+  model: llama3_1_8b_local
+  dataset: wikitext2
+
+parameters:
+  average_bits: 3.25
+  context_size: 8192
+  qdict_path: msq_results/3_8b/mem_constrained/default/3.25bit.pt
+
+arguments:
+  - --model
+  - "{{ model.locator }}"
+  - --qdict_path
+  - msq_results/3_8b/mem_constrained/default/3.25bit.pt
+  - --ctx_size
+  - "8192"
+  - --save_dir
+  - "{{ output.run_dir }}/quant_results"
+
+runtime:
+  python: python
+  gpus: [0]
+  seed: 0
+
+output:
+  run_dir: "{{ roots.output_root }}/q_palette_llama3_1_8b_mem325/evaluate"

@@ -1,0 +1,27 @@
+# 把 optimize 阶段的逐层参数打包成 ParoQuant INT4 checkpoint。
+experiment:
+  id: paroquant_qwen3_8b_export_real
+  method: paroquant
+  stage: export_real
+  evidence_level: upstream
+
+resources:
+  model: qwen3_8b_local
+
+parameters:
+  source_artifact: int/rotation/ParoQuant/upstream/output/Qwen3-8B
+  export_type: packed_int4
+
+arguments:
+  - --result-dir
+  - output/Qwen3-8B
+  - --output-path
+  - "{{ output.run_dir }}/model"
+
+runtime:
+  python: python
+  gpus: [0]
+  seed: 0
+
+output:
+  run_dir: "{{ roots.output_root }}/paroquant_qwen3_8b_int4/export_real"

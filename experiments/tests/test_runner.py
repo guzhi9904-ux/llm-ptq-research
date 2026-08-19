@@ -3,9 +3,11 @@
 from __future__ import annotations
 
 import importlib.util
+import os
 from pathlib import Path
 import tempfile
 import unittest
+from unittest.mock import patch
 
 import yaml
 
@@ -111,6 +113,49 @@ class RunnerTest(unittest.TestCase):
                     self.assertTrue(
                         (workdir / relative).is_file(), f"{method_id}.{stage_id}: {relative}"
                     )
+
+    def test_every_experiment_config_builds_and_passes_static_preflight(self) -> None:
+        """不加载模型，只确认所有 YAML 能展开成入口和参数均存在的命令。"""
+
+        with tempfile.TemporaryDirectory() as temporary:
+            temporary_root = Path(temporary)
+            model_root = temporary_root / "models"
+            dataset_root = temporary_root / "datasets"
+            cache_root = temporary_root / "cache"
+            output_root = temporary_root / "outputs"
+            for relative in (
+                "meta-llama/Llama-2-7b-hf",
+                "meta-llama/Meta-Llama-3-8B",
+                "meta-llama/Llama-3.1-8B-Instruct",
+                "meta-llama/Llama-3.1-8B",
+                "meta-llama/Llama-3.2-1B-Instruct",
+                "Qwen/Qwen3-8B",
+            ):
+                (model_root / relative).mkdir(parents=True)
+            pile_path = dataset_root / "pile" / "val.jsonl.zst"
+            pile_path.parent.mkdir(parents=True)
+            pile_path.touch()
+            cache_root.mkdir()
+            output_root.mkdir()
+
+            environment = {
+                "PTQ_MODEL_ROOT": str(model_root),
+                "PTQ_DATASET_ROOT": str(dataset_root),
+                "PTQ_CACHE_ROOT": str(cache_root),
+                "PTQ_OUTPUT_ROOT": str(output_root),
+            }
+            resources_path = REPO_ROOT / "configs" / "resources.example.yaml"
+            config_paths = sorted((REPO_ROOT / "experiments" / "configs").glob("*.yaml"))
+            with patch.dict(os.environ, environment, clear=False):
+                for config_path in config_paths:
+                    if config_path.name == "example_reproduction.yaml":
+                        continue
+                    with self.subTest(config=config_path.name):
+                        plan = RUNNER.build_plan(
+                            config_path, resources_path, RUNNER.DEFAULT_REGISTRY
+                        )
+                        errors, _ = RUNNER.preflight(plan, check_executable=False)
+                        self.assertEqual(errors, [])
 
 
 if __name__ == "__main__":

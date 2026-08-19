@@ -1,0 +1,62 @@
+# 使用 W16A4KV4 阶段得到的 R.bin，执行 SpinQuant + GPTQ W4A4KV4 评测。
+experiment:
+  id: spinquant_llama2_7b_gptq_w4a4kv4_seed0
+  method: spinquant
+  stage: quantize_eval
+  evidence_level: reproduction
+
+resources:
+  model: llama2_7b_local
+  dataset: wikitext2
+
+parameters:
+  weight_bits: 4
+  activation_bits: 4
+  key_bits: 4
+  value_bits: 4
+  weight_solver: gptq
+  sequence_length: 2048
+
+arguments:
+  - --do_train
+  - "False"
+  - --do_eval
+  - "True"
+  - --per_device_eval_batch_size
+  - "4"
+  - --model_max_length
+  - "2048"
+  - --fp16
+  - "False"
+  - --bf16
+  - "True"
+  - --save_safetensors
+  - "False"
+  - --w_bits
+  - "4"
+  - --a_bits
+  - "4"
+  - --k_bits
+  - "4"
+  - --v_bits
+  - "4"
+  - --w_clip
+  - --a_asym
+  - --k_asym
+  - --v_asym
+  - --k_groupsize
+  - "128"
+  - --v_groupsize
+  - "128"
+  - --rotate
+  - --optimized_rotation_path
+  - "{{ roots.output_root }}/spinquant_llama2_7b_w4a4kv4/rotation/R.bin"
+
+runtime:
+  python: python
+  gpus: [0]
+  processes: 1
+  seed: 0
+
+output:
+  run_dir: "{{ roots.output_root }}/spinquant_llama2_7b_w4a4kv4/gptq_eval"

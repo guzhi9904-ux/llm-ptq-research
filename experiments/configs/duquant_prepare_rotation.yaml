@@ -1,0 +1,19 @@
+# DuQuant 的基础 rotation 数据与模型无关，官方说明只需生成一次。
+experiment:
+  id: duquant_prepare_rotation_once
+  method: duquant
+  stage: prepare_rotation
+  evidence_level: upstream
+
+parameters:
+  artifact_location: int/rotation/DuQuant/upstream/rotations
+
+arguments: []
+
+runtime:
+  python: python
+  gpus: []
+  seed: 2
+
+output:
+  run_dir: "{{ roots.output_root }}/duquant/shared_rotation_prepare"

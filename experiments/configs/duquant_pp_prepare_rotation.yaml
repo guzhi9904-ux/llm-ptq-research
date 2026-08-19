@@ -1,0 +1,19 @@
+# DuQuant++ 沿用 DuQuant 的 rotation 基础数据生成入口，只需准备一次。
+experiment:
+  id: duquant_pp_prepare_rotation_once
+  method: duquant_pp
+  stage: prepare_rotation
+  evidence_level: upstream
+
+parameters:
+  artifact_location: fp4/methods/DuQuantPP/upstream/rotations
+
+arguments: []
+
+runtime:
+  python: python
+  gpus: []
+  seed: 2
+
+output:
+  run_dir: "{{ roots.output_root }}/duquant_pp/shared_rotation_prepare"

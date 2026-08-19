@@ -1,0 +1,60 @@
+# NVFP4 GPTQ 基线：不加 rotation、MSE scale 或 static ActOrder。
+experiment:
+  id: fp4_nvfp4_gptq_llama3_1_8b_1024x2048_seed42
+  method: fp4_gptq
+  stage: quantize_eval
+  evidence_level: reproduction
+
+resources:
+  model: llama3_1_8b_instruct_local
+  dataset: fineweb_edu
+
+parameters:
+  format: nvfp4
+  weight_bits: 4
+  activation_bits: 4
+  block_size: 16
+  scale_precision: e4m3
+  transform: identity
+  relative_damp: 0.01
+  quantization_order: default
+  calibration_samples: 1024
+  sequence_length: 2048
+
+arguments:
+  - --dataset_name_or_path
+  - "{{ dataset.locator }}"
+  - --format
+  - nvfp
+  - --scale_precision
+  - e4m3
+  - --w_bits
+  - "4"
+  - --a_bits
+  - "4"
+  - --w_group_size
+  - "16"
+  - --a_group_size
+  - "16"
+  - --w_observer
+  - minmax
+  - --transform_class
+  - identity
+  - --gptq
+  - --quantization_order
+  - default
+  - --rel_damp
+  - "0.01"
+  - --num_sequences
+  - "1024"
+  - --sequence_length
+  - "2048"
+  - --eval_perplexity
+
+runtime:
+  python: python
+  gpus: [0]
+  seed: 42
+
+output:
+  run_dir: "{{ roots.output_root }}/fp4_baselines/nvfp4_gptq_llama3_1_8b"

@@ -1,0 +1,5 @@
+[tool.pytest.ini_options]
+# 从仓库根目录运行 pytest 时自动找到 FP4 参考包，不要求先执行 pip install -e。
+pythonpath = ["fp4/reference/src"]
+testpaths = ["experiments/tests", "fp4/reference/tests"]
+addopts = "-ra"

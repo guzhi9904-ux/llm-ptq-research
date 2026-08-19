@@ -1,0 +1,5 @@
+# FP4 张量级参考实现的固定 CPU 验证环境。
+# CUDA 实验不要直接复用这份文件，应按目标 GPU 和 CUDA 版本安装对应 PyTorch。
+torch==2.5.1
+PyYAML==6.0.2
+pytest==8.3.5

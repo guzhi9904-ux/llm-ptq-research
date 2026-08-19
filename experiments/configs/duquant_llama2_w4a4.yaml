@@ -1,0 +1,60 @@
+# DuQuant 官方 run.sh 的 W4A4 主设置，保留 block rotation、permutation、LAC 和 SWC 参数。
+experiment:
+  id: duquant_llama2_7b_w4a4_seed2
+  method: duquant
+  stage: quantize_eval
+  evidence_level: reproduction
+
+resources:
+  model: llama2_7b_local
+  dataset: wikitext2
+
+parameters:
+  weight_bits: 4
+  activation_bits: 4
+  block_size: 128
+  max_rotation_step: 256
+  permutation_times: 1
+  alpha: 0.6
+  activation_clipping_ratio: 0.9
+  static_weight_clipping_ratio: 0.8
+  epochs: 0
+
+arguments:
+  - --output_dir
+  - "{{ output.run_dir }}/model_output"
+  - --wbits
+  - "4"
+  - --abits
+  - "4"
+  - --block_size
+  - "128"
+  - --max_rotation_step
+  - "256"
+  - --permutation_times
+  - "1"
+  - --epochs
+  - "0"
+  - --lwc
+  - --alpha
+  - "0.6"
+  - --smooth
+  - --lac
+  - "0.9"
+  - --swc
+  - "0.8"
+  - --act-scales
+  - "{{ roots.output_root }}/duquant_llama2_7b_w4a4/prepare/act_scales/Llama-2-7b.pt"
+  - --act-shifts
+  - "{{ roots.output_root }}/duquant_llama2_7b_w4a4/prepare/act_shifts/Llama-2-7b.pt"
+  - --eval_ppl
+  - --tasks
+  - arc_easy,arc_challenge,hellaswag,winogrande,boolq,piqa
+
+runtime:
+  python: python
+  gpus: [0]
+  seed: 2
+
+output:
+  run_dir: "{{ roots.output_root }}/duquant_llama2_7b_w4a4/quantize"

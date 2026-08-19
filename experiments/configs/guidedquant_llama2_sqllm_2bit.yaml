@@ -1,0 +1,29 @@
+# GuidedQuant + SqueezeLLM：2 bit，按官方脚本使用 4 个 gradient averaging group。
+experiment:
+  id: guidedquant_llama2_7b_sqllm_2bit_groups4
+  method: guidedquant
+  stage: sqllm_quantize
+  evidence_level: reproduction
+
+resources:
+  model: llama2_7b_local
+  dataset: redpajama
+
+parameters:
+  backend: squeezellm
+  weight_bits: 2
+  gradient_groups: 4
+  calibration_samples: 1024
+  sequence_length: 4096
+
+arguments:
+  - "2"
+  - "4"
+
+runtime:
+  python: python
+  gpus: [0]
+  seed: 0
+
+output:
+  run_dir: "{{ roots.output_root }}/guidedquant_llama2_7b_sqllm_2bit_groups4"

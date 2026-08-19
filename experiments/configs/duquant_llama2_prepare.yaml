@@ -1,0 +1,36 @@
+# 为 DuQuant LLaMA-2-7B 实验单独收集 activation scale 和 shift。
+experiment:
+  id: duquant_llama2_7b_prepare_128x2048_seed2
+  method: duquant
+  stage: collect_scales
+  evidence_level: reproduction
+
+resources:
+  model: llama2_7b_local
+  dataset: wikitext2
+
+parameters:
+  calibration_samples: 128
+  sequence_length: 2048
+
+arguments:
+  - --scales-output-path
+  - "{{ output.run_dir }}/act_scales"
+  - --shifts-output-path
+  - "{{ output.run_dir }}/act_shifts"
+  - --calib_dataset
+  - wikitext2
+  - --num-samples
+  - "128"
+  - --seq-len
+  - "2048"
+  - --seed
+  - "2"
+
+runtime:
+  python: python
+  gpus: [0]
+  seed: 2
+
+output:
+  run_dir: "{{ roots.output_root }}/duquant_llama2_7b_w4a4/prepare"

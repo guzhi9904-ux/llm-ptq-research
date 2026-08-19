@@ -19,6 +19,30 @@ Windows PowerShell 的激活命令为：
 pip install -r environments/runner-requirements.txt
 ```
 
+也可以直接让脚本创建隔离环境：
+
+```powershell
+# Windows：只安装 runner 依赖
+powershell -ExecutionPolicy Bypass -File environments/bootstrap.ps1 -Profile runner
+
+# Windows：安装 FP4 张量测试需要的固定依赖
+powershell -ExecutionPolicy Bypass -File environments/bootstrap.ps1 -Profile fp4-reference
+```
+
+```bash
+# Linux；第二个参数可以指定虚拟环境目录
+bash environments/bootstrap.sh runner .runner-venv
+bash environments/bootstrap.sh fp4-reference .fp4-reference-venv
+```
+
+固定文件的用途：
+
+- `runner-requirements.txt`：只运行统一入口。
+- `ci-requirements.txt`：CI 的 YAML 和 pytest 检查。
+- `fp4-reference-requirements.txt`：CPU 上运行 FP4 合成张量测试。
+
+PyTorch 的 CUDA wheel 必须按目标机器重新选择，不能拿 CPU 验证环境直接跑 kernel。
+
 ## 方法环境原则
 
 1. 每个方法在独立 Conda/Mamba/venv 环境中安装。
@@ -32,3 +56,14 @@ python experiments/runners/ptq.py doctor --method quarot
 ```
 
 各环境的关键版本和证据来源见 `profiles.yaml`。完整依赖仍以固定 `upstream/` 中的文件为准，统一清单不替代官方文件。
+
+## 仓库级轻量验证
+
+根目录的 `pyproject.toml` 已设置 FP4 参考包搜索路径。安装测试依赖后可以直接运行：
+
+```bash
+python tools/validate_repository.py
+python -m pytest -q
+```
+
+GitHub Actions 也只执行这两类 CPU 检查，不下载模型、不编译 CUDA kernel、不把它当成论文结果复现。

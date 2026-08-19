@@ -1,0 +1,55 @@
+# MR-GPTQ 主表的 NVFP4 RTN 基线：16 元素 block 和 E4M3 block scale。
+experiment:
+  id: fp4_nvfp4_rtn_llama3_1_8b_1024x2048_seed42
+  method: fp4_rtn
+  stage: quantize_eval
+  evidence_level: reproduction
+
+resources:
+  model: llama3_1_8b_instruct_local
+  dataset: fineweb_edu
+
+parameters:
+  format: nvfp4
+  weight_bits: 4
+  activation_bits: 4
+  weight_group_size: 16
+  activation_group_size: 16
+  scale_precision: e4m3
+  transform: identity
+  weight_observer: minmax
+  calibration_samples: 1024
+  sequence_length: 2048
+
+arguments:
+  - --dataset_name_or_path
+  - "{{ dataset.locator }}"
+  - --format
+  - nvfp
+  - --scale_precision
+  - e4m3
+  - --w_bits
+  - "4"
+  - --a_bits
+  - "4"
+  - --w_group_size
+  - "16"
+  - --a_group_size
+  - "16"
+  - --w_observer
+  - minmax
+  - --transform_class
+  - identity
+  - --num_sequences
+  - "1024"
+  - --sequence_length
+  - "2048"
+  - --eval_perplexity
+
+runtime:
+  python: python
+  gpus: [0]
+  seed: 42
+
+output:
+  run_dir: "{{ roots.output_root }}/fp4_baselines/nvfp4_rtn_llama3_1_8b"
